@@ -8,7 +8,7 @@
 
 <div align="center">
 
-*"Make a MC server in just 10mins, in 1 script."*
+*"The fastest way to bootstrap a Minecraft server on Linux."*
 
 ![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/glazzite/ams.sh/total?style=for-the-badge&color=lightblue)
 ![GitHub Repo stars](https://img.shields.io/github/stars/glazzite/ams.sh?style=for-the-badge&color=gold)
