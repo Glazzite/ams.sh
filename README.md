@@ -2,17 +2,27 @@
 
 **Automated Minecraft Server**
 
-</h>
+<img src="images/ams.png" alt="Automated Minecraft Server" width="600">
 
-<p align="center">
-  <img height="300" src="images/ams.png" alt="Automated Minecraft Server">
-</p>
+</h1>
 
+<div align="center">
 
-ams.sh - A script used to produce a full, default vanilla Java Minecraft server within 10mins, in just a single script.
+*"Make a MC server in just 10mins, in 1 script."*
 
-> [!NOTE]
-> Said server can be reused, redirected, edited, etc. Once the script is done, the server is completely yours to do whatever you please.
+![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/xeproject/xerepo/total?style=for-the-badge&color=lightblue)
+![GitHub Repo stars](https://img.shields.io/github/stars/xeproject/xerepo?style=for-the-badge&color=gold)
+![GitHub Tag](https://img.shields.io/github/v/tag/xeproject/xerepo?include_prereleases&sort=semver&style=for-the-badge&label=XI%20Version&color=Lightgreen)
+![Discord](https://img.shields.io/discord/1351857871838777374?style=for-the-badge&logo=discord&logoColor=white&label=Join%20Us&color=%235865F2&link=https://discord.gg/XyXctdthVZ)
+
+</div>
+
+<div align="center">
+
+ams.sh is a high-velocity deployment engine designed to spin up a production-ready, vanilla Java Minecraft server in under 10 minutes. By condensing environment configuration, dependency management, and EULA automation into a single execution, it eliminates the friction of manual setup, delivering a clean, unbloated instance every time
+
+</div>
+
 
 # 📘 Installation
 
@@ -26,7 +36,10 @@ In its core lines, its just,
 - Start Server
 - Edit Eula.txt
 
-With extra decorations and supportive commands, and thats the scirpt.
+With extra decorations and supportive commands, and thats the scirpt. 
+
+> [!NOTE]
+> This script is fully online-based, so make sure to stay connected to the internet before use. 😊
 
 ### ❓ Why?
 To use a repurposable script ->
@@ -62,6 +75,10 @@ Currently supported MC versions are
 Start
 - [x] Make Basic Script
 
+Minecraft Related
+- [ ] Forge/Fabirc/Paper Setup
+- [ ] Automated Optimizations
+
 QoL Features
 - [ ] User-Friendly Guided Install
 - [ ] Multi-MC Version Capability
@@ -75,7 +92,6 @@ OS Capability
 
 Testing
 - [ ] Linux Distros
-- [ ] SteamOS / Steam Deck
 
 > [!IMPORTANT]
 > The script will be 100% Bash/Shell written and will not use any external languages. If, for Windows, it will be 100% Batch written and will not use PowerShell unless necessary.
@@ -93,6 +109,7 @@ Donating isn't necessary, just a reminder.
 
 > i hate caffeine.
 
+# 🙏 Thank you!
 
 
 
