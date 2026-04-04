@@ -27,7 +27,7 @@ ams.sh is a super quick deployment script designed to spin up a production-ready
 
 There are 3 methods to download the script, all needing a bash commandline/terminal.
 
-### 1. cURl (simplest)
+### 1. cURL (simplest)
 ```
 curl -sSL https://github.com/Glazzite/ams.sh/releases/download/v1.0/ams.sh | bash
 ```
