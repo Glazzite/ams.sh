@@ -1,8 +1,14 @@
+<h1 align="center">
+
+**Automated Minecraft Server**
+
+</h>
+
 <p align="center">
   <img height="300" src="images/ams.png" alt="Automated Minecraft Server">
 </p>
 
-# ⭐ Automated Minecraft Server
+
 ams.sh - A script used to produce a full, default vanilla Java Minecraft server within 10mins, in just a single script.
 
 > [!NOTE]
