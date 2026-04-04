@@ -18,7 +18,7 @@
 
 <div align="center">
 
-ams.sh is a super quick deployment script designed to spin up a production-ready, vanilla Java Minecraft server in under 10 minutes. By condensing environment configuration, dependency management, and EULA automation into a single execution, it eliminates the friction of manual setup, delivering a clean, unbloated instance every time.
+ams.sh is a lightweight, deployment, bootstrap script designed to spin up a production-ready, Java Minecraft server in under 10 minutes. By condensing environment configuration, dependency management, and EULA automation into a single execution, it eliminates the friction of manual setup, delivering a clean, unbloated instance every time. 
 
 </div>
 
