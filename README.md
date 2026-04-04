@@ -29,7 +29,7 @@ There are 3 methods to download the script, all needing a bash commandline/termi
 
 ### 1. cURl (simplest)
 ```
-curl -sSL https://github.com/Glazzite/ams.sh/blob/main/ams.sh | bash
+curl -sSL https://github.com/Glazzite/ams.sh/releases/download/v1.0/ams.sh | bash
 ```
 
 ### 2. Releases
