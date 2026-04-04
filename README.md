@@ -81,9 +81,6 @@ This script is made for Linux (GNU/Linux), specifcally,
 
 As this scirpt installs packages via the native package manager of said distros.
 
-> [!NOTE]
-> Windows represntative of the project can be made if this repo hits a good amount of recognition. If you'd like to see that, Star the repo :)
-
 ### ⛏ Minecraft Version
 Currently supported MC versions are
 - [x] 26.1.1
@@ -112,13 +109,11 @@ QoL Features
 
 OS Capability
 - [ ] Arch Linux
-- [ ] Windows (only after recognition)
-
-Testing
+- [ ] SteamOS
 - [ ] Linux Distros
 
 > [!IMPORTANT]
-> The script will be 100% Bash/Shell written and will not use any external languages. If, for Windows, it will be 100% Batch written and will not use PowerShell unless necessary.
+> The script will be 100% Bash/Shell written and will not use any external languages.
 
 
 # 🔔 Credits
