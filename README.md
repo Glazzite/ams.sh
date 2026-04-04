@@ -10,6 +10,7 @@ ams.sh - A script used to produce a full, default vanilla Java Minecraft server 
 
 # 📘 Installation
 
+# 📕 Information
 
 ### ❓ How?
 In its core lines, its just,
