@@ -25,6 +25,31 @@ ams.sh is a super quick deployment script designed to spin up a production-ready
 
 # 📘 Installation
 
+There are 3 methods to download the script, all needing a bash commandline/terminal.
+
+### 1. Curl (simplest)
+```
+curl -sSL https://github.com/Glazzite/ams.sh/blob/main/ams.sh | bash
+```
+
+### 2. Releases
+Latest versions of the script will be downloadable in the Release tab of this repo. Once downloaded,
+```
+cd /{saved-directory}/
+chmod -x ams.sh
+sudo ams.sh
+``` 
+
+### 3. Repo Cloning
+``` 
+git clone https://github.com/Glazzite/ams.sh
+cd ams.sh
+chmod -x ams.sh
+sudo ams.sh
+```
+
+And the script will guide you and do its thing automatically.
+
 # 📕 Information
 
 ### ❓ How?
