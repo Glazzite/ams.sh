@@ -10,9 +10,9 @@
 
 *"Make a MC server in just 10mins, in 1 script."*
 
-![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/xeproject/xerepo/total?style=for-the-badge&color=lightblue)
-![GitHub Repo stars](https://img.shields.io/github/stars/xeproject/xerepo?style=for-the-badge&color=gold)
-![GitHub Tag](https://img.shields.io/github/v/tag/xeproject/xerepo?include_prereleases&sort=semver&style=for-the-badge&label=XI%20Version&color=Lightgreen)
+![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads//glazzite/ams.sh/total?style=for-the-badge&color=lightblue)
+![GitHub Repo stars](https://img.shields.io/github/stars//glazzite/ams.sh?style=for-the-badge&color=gold)
+![GitHub Tag](https://img.shields.io/github/v/tag/glazzite/ams.sh?include_prereleases&sort=semver&style=for-the-badge&label=Version&color=Lightgreen)
 ![Discord](https://img.shields.io/discord/1351857871838777374?style=for-the-badge&logo=discord&logoColor=white&label=Join%20Us&color=%235865F2&link=https://discord.gg/XyXctdthVZ)
 
 </div>
