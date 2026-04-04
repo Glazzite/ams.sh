@@ -2,16 +2,16 @@
   <img height="300" src="images/ams.png" alt="Automated Minecraft Server">
 </p>
 
-# Automated Minecraft Server
+# ⭐ Automated Minecraft Server
 ams.sh - A script used to produce a full, default vanilla Java Minecraft server within 10mins, in just a single script.
 
 > [!NOTE]
 > Said server can be reused, redirected, edited, etc. Once the script is done, the server is completely yours to do whatever you please.
 
-# Installation
+# 📘 Installation
 
 
-### How?
+### ❓ How?
 In its core lines, its just,
 - Installing Java
 - Downloading Server.jar from MC
@@ -21,7 +21,7 @@ In its core lines, its just,
 
 With extra decorations and supportive commands, and thats the scirpt.
 
-### Why?
+### ❓ Why?
 To use a repurposable script ->
 - To automate any MC server setup
 - For people who often makes new serers
@@ -30,7 +30,7 @@ To use a repurposable script ->
 > [!CAUTION]
 > This script was made as a learning experience for me, the creator.
 
-### Operating System
+### 💻 Operating System
 This script is made for Linux (GNU/Linux), specifcally,
 - [x] Ubuntu/Debain (apt)
 - [ ] Arch Linux (pacman/yay)
@@ -40,14 +40,14 @@ As this scirpt installs packages via the native package manager of said distros.
 > [!NOTE]
 > Windows represntative of the project can be made if this repo hits a good amount of recognition. If you'd like to see that, Star the repo :)
 
-### Minecraft Version
+### ⛏ Minecraft Version
 Currently supported MC versions are
 - [x] 26.1.1
 
 > [!IMPORTANT]
 > More MC versions will be supported soon.
 
-# To-Do List
+# 🧪 To-Do List
 
 > [!NOTE]
 > If you'd like to contribute this repository, please be our guest.
@@ -72,14 +72,16 @@ Testing
 
 > [!IMPORTANT]
 > The script will be 100% Bash/Shell written and will not use any external languages. If, for Windows, it will be 100% Batch written and will not use PowerShell unless necessary.
-# Credits
+
+
+# 🔔 Credits
 Code written by Glazzite.
 License under GNU 3.0 General Public License.
 
 > [!IMPORTANT]
 > A bit of AI was used for the first part of the code - "Scirpt Dir"
 
-# Buy me some tea?
+# 🍵 Buy me some tea?
 Donating isn't necessary, just a reminder.
 
 > i hate caffeine.
