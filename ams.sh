@@ -3,7 +3,7 @@
 # An Automatic Minecraft Server Setuper for Linux (Ubuntu/Debian)
 # Minecraft Server Version = 26.1.1
 
-# Script Version = v1.0
+# Script Version = v0.1
 # Made by Glaz - Glazzite
 
 # -- Start --
@@ -43,7 +43,7 @@ read -p "Press any key to continue..."
 echo
 echo -- Info --
 echo "For Linux (Ubuntu/Debian)"
-echo "Script Version : v1.0"
+echo "Script Version : v0.1"
 echo "Minecraft Server Version : 26.1.1"
 echo "Made by Glaz (@glazzite)"
 echo ----------
