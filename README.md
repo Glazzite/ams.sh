@@ -90,11 +90,16 @@ Currently supported MC versions are
 
 # 🧪 To-Do List
 
-> [!NOTE]
-> If you'd like to contribute this repository, please be our guest.
-
 Start
-- [x] Make Basic Script
+- [x] Make Basic Script - v0.1
+
+Basics (v0.x)
+- [x] Functions - v0.2
+- [ ] Flags/Options - v0.3
+- [ ] start.sh / Auto-Generated Script with Recommended/User-Choiced Flags - v0.4
+- [ ] Error-Handling / Debuging / Logging / Cleanup of Script - v0.5
+- [ ] Cleaner Decoratives v0.6
+- [ ] Package Manager Detector v0.7
 
 Minecraft Related
 - [ ] Forge/Fabirc/Paper Setup
@@ -103,9 +108,6 @@ Minecraft Related
 QoL Features
 - [ ] User-Friendly Guided Install
 - [ ] Multi-MC Version Capability
-- [ ] Error-Handling
-- [ ] Cleaner Decoratives
-- [ ] Package Manager Detector
 
 OS Capability
 - [ ] Arch Linux
