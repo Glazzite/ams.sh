@@ -29,7 +29,7 @@ There are 3 methods to download the script, all needing a bash commandline/termi
 
 ### 1. cURL (simplest)
 ```
-curl -sSL https://github.com/Glazzite/ams.sh/releases/download/v0.3/ams-v0.3.sh | bash
+curl -sSL https://github.com/Glazzite/ams.sh/releases/download/v0.4/ams-v0.4.sh | bash
 ```
 
 ### 2. Releases
@@ -95,15 +95,17 @@ Start
 
 Basics (v0.x)
 - [x] Functions - v0.2
-- [ ] Flags/Options - v0.3
-- [ ] start.sh / Auto-Generated Script with Recommended/User-Choiced Flags - v0.4
+- [x] Flags/Options - v0.3
+- [x] start.sh / Auto-Generated Script with Recommended/User-Choiced Flags - v0.4
+- [x] Ram Allocation Added - v0.4
 - [ ] Error-Handling / Debuging / Logging / Cleanup of Script - v0.5
 - [ ] Cleaner Decoratives v0.6
 - [ ] Package Manager Detector v0.7
 
 Minecraft Related
 - [ ] Forge/Fabirc/Paper Setup
-- [ ] Automated Optimizations
+- [x] Automated Optimizations
+> as in java memory flags
 
 QoL Features
 - [ ] User-Friendly Guided Install
@@ -117,13 +119,12 @@ OS Capability
 > [!IMPORTANT]
 > The script will be 100% Bash/Shell written and will not use any external languages.
 
-
 # 🔔 Credits
 Code written by Glazzite.
 License under GNU 3.0 General Public License.
 
 > [!IMPORTANT]
-> A bit of AI was used for the first part of the code - "Scirpt Dir"
+> A bit of AI was used, I say in bit, I mean 10-15% of Logic.
 
 # 🍵 Buy me some tea?
 Donating isn't necessary, just a reminder.
@@ -133,6 +134,7 @@ Donating isn't necessary, just a reminder.
 # 🙏 Thank you!
 Have fun with the script!
 
+"Shattering Limits." - Glazzite
 
 
 
