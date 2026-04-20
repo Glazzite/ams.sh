@@ -98,7 +98,7 @@ Basics (v0.x)
 - [x] Flags/Options - v0.3
 - [x] start.sh / Auto-Generated Script with Recommended/User-Choiced Flags - v0.4
 - [x] Ram Allocation Added - v0.4
-- [ ] Error-Handling / Debuging / Logging / Cleanup of Script - v0.5
+- [x] Error-Handling / Cleanup of Script - v0.5
 - [ ] Cleaner Decoratives v0.6
 - [ ] Package Manager Detector v0.7
 
