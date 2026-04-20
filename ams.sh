@@ -1,6 +1,6 @@
 #!/bin/bash
 # This script is licened under GNU 3.0 General Public License
-# Script Version = v0.4
+# Script Version = v0.5
 # Made by Glaz - Glazzite
 
 
@@ -39,7 +39,7 @@ while getopts 'rushv' option; do
 
 		v)	# Version of the Script
 			printf "\n"
-			echo "[VER] ams.sh v0.4"
+			echo "[VER] ams.sh v0.5"
 			echo "[STATUS] Alpha"
 			printf "\n"
 			exit 0
@@ -114,7 +114,7 @@ intro() {
 		echo
 		echo -- Info --
 		echo "For Linux (Ubuntu/Debian)"
-		echo "Script Version : v0.4"
+		echo "Script Version : v0.5"
 		echo "Minecraft Server Version : 26.1.1"
 		echo "Made by Glaz (@glazzite)"
 		echo ----------
@@ -131,14 +131,26 @@ script_dir() {
 	# Taking in Caller's home directory to prevent installing onto /root
 	REAL_USER="${SUDO_USER:-$USER}"
 	REAL_HOME=$(getent passwd "$REAL_USER" | cut -d: -f6)
-	TARGET_DIR="$REAL_HOME/ams"
-	mkdir -p "$TARGET_DIR"
-	chown "$REAL_USER:$REAL_USER" "$TARGET_DIR"
-	cd "$TARGET_DIR"
 
+
+	if [ -z "$REAL_HOME" ]; then
+		echo "[ERROR] Home Directory for $REAL_USER Cannot be Found" >&2
+		exit 1
+	fi
+
+	TARGET_DIR="$REAL_HOME/ams"
+	mkdir -p "$TARGET_DIR" || { echo "[ERROR] Failed to create $TARGET_DIR"; exit 1; }
+
+	if [ "$EUID" -eq 0 ]; then
+		chown "$REAL_USER:$REAL_USER" "$TARGET_DIR" || { echo "ERROR: Failed to set permissions"; exit 1; }
+	fi
+
+	cd "$TARGET_DIR" || { echo "[ERROR] Could not enter $TARGET_DIR"; exit 1; }
+
+	# UI Output
 	if [ "$silent" = true ]; then
 
-		echo "[SILENT] Directory Created at $TARGET_DIR"
+		echo "[SILENT] Directory ready at $TARGET_DIR"
 
 	else
 
@@ -148,9 +160,9 @@ script_dir() {
 		echo Setting up Script Directory...
 		echo ----------------
 		printf "\n"
+		sleep 1
+		echo "Directory Created & Verified : $TARGET_DIR"
 		sleep 2
-		echo Directory Created : $TARGET_DIR
-		sleep 4
 
 	fi
 }
@@ -159,13 +171,21 @@ install_java() {
 
 	if [ "$silent" = true ]; then
 
+		echo "[SILENT] Updating package lists..."
+        apt-get update -y > /dev/null 2>&1
 		echo "[SILENT] Installing Java Runtime"
-		apt install deafult-jdk openjdk-25-jdk -y > /dev/null 2>&1
+		apt-get install default-jdk openjdk-25-jdk -y > /dev/null 2>&1 || { echo "[ERROR] Java installation failed"; exit 1; }
 		echo "[SILENT] Java Installed"
 
 	else
 
 		clear
+		printf "\n"
+		echo -- Update --
+		echo Updating Package Repository
+		echo ------------
+        apt-get update -y
+		sleep 1
 		printf "\n"
 		echo -- Java --
 		echo Installing Required Java Versions...
@@ -175,18 +195,27 @@ install_java() {
 		# Requires Sudo
 		# default-jdk = Java 21
 		# openjdk-25-jdk = Java 25 (experimental version)
-		apt install default-jdk openjdk-25-jdk -y
-		sleep 4
+		if apt-get install default-jdk openjdk-25-jdk -y; then
+            echo "[SUCCESS] Java versions installed."
+            sleep 2
+        else
+            echo "[ERROR] Failed to install Java packages." >&2
+            exit 1
+        fi
+		sleep 1
 
 	fi
 }
 
 download_mcserver() {
 
+	local JAR_URL="https://piston-data.mojang.com/v1/objects/49c8195703ad0ba4f0a4efbccfd85a4a8ca57431/server.jar"
+	local JAR_PATH="$TARGET_DIR/server.jar"
+
 	if [ "$silent" = true ]; then
 
 		echo "[SILENT] Downloading server.jar"
-		curl -sS -o $TARGET_DIR/server.jar https://piston-data.mojang.com/v1/objects/49c8195703ad0ba4f0a4efbccfd85a4a8ca57431/server.jar 
+		curl -fsSl -o "$JAR_PATH" "$JAR_URL" || { echo "[ERROR] Download failed"; exit 1; }
 		echo "[SILENT] server.jar Downloaded"
 
 	else
@@ -194,26 +223,49 @@ download_mcserver() {
 		clear
 		printf "\n"
 		echo -- Download --
-		echo Downloading MC Server 26.1.1 From Minecraft.net
+		echo Downloading MC 26.1.1 Server.jar
 		echo --------------
 		printf "\n"
 		sleep 2
 		# Given link is the direct link to download the .jar file
-		curl -o $TARGET_DIR/server.jar https://piston-data.mojang.com/v1/objects/49c8195703ad0ba4f0a4efbccfd85a4a8ca57431/server.jar
-		sleep 4
+		if curl -fL --progress-bar -o "$JAR_PATH" "$JAR_URL"; then
+            echo "Download Complete: $JAR_PATH"
+            sleep 2
+        else
+            echo "[ERROR] Failed to download server.jar. Check your internet." >&2
+            exit 1
+        fi
+		sleep 2
 
 	fi
+
+	if [ ! -s "$JAR_PATH" ]; then
+        echo "[ERROR] Downloaded file is empty or missing!" >&2
+        exit 1
+    fi
+
 }
 
 mcserver() {
 
+	local EULA="eula.txt"
+    local PROP_FILE="server.properties"
+
 	if [ "$silent" = true ]; then
 
 		echo "[SILENT] Setting up MC Server"
-		java -jar server.jar > /dev/null 2>&1
-		sed -i 's/eula=false/eula=true/' eula.txt
-	        sed -i 's/motd=A Minecraft Server/motd=Made By ams.sh/' server.properties
-		echo "[SILENT] MC Server Ready"
+		java -Xmx1024M -Xms1024M -jar server.jar > /dev/null 2>&1
+
+		if [ ! -f "$EULA" ]; then
+            echo "[ERROR] eula.txt was not generated!" >&2
+            exit 1
+        fi
+
+		sed -i 's/eula=false/eula=true/' "$EULA"
+		sed -i 's/motd=.*/motd=Made By ams.sh/' "$PROP_FILE" 2>/dev/null
+		echo "[SILENT] EULA Accepted & MOTD set."
+
+
 
 	else
 
@@ -223,14 +275,29 @@ mcserver() {
 		echo "Setting up Server & and its properties..."
 		echo ------------
 		printf "\n"
+
 		# Changes Below :
 		# eula=true >eula.txt
 		# motd=Made By ams.sh >server.properties
+
 		sleep 2
-		java -jar server.jar
-		sed -i 's/eula=false/eula=true/' eula.txt
-		sed -i 's/motd=A Minecraft Server/motd=Made By ams.sh/' server.properties
-		sleep 4
+		java -Xmx1024M -Xms1024M -jar server.jar
+
+		if [ -f "$EULA_FILE" ]; then
+            echo "Accepting EULA and customizing properties..."
+            sed -i 's/eula=false/eula=true/' "$EULA"
+
+            if [ -f "$PROP_FILE" ]; then
+                sed -i 's/motd=.*/motd=Made By ams.sh/' "$PROP_FILE"
+            fi
+
+            echo "Setup Complete!"
+            sleep 2
+        else
+            echo "[ERROR]: Server failed to generate $EULA" >&2
+            exit 1
+        fi
+		sleep 2
 
 	fi
 }
@@ -238,31 +305,23 @@ mcserver() {
 
 ram_allocate() {
 
-	TOTAL_KB=$(grep MemTotal /proc/meminfo | awk '{print $2}') #Total RAM Kilobytes from /proc/meminfo
+	TOTAL_KB=$(grep MemTotal /proc/meminfo | awk '{print $2}') #Total RAM Kilobytes
 	TOTAL_GB=$(( TOTAL_KB / 1024 / 1024 )) # Convert to GB
 	MAX_RAM=$(( TOTAL_GB - 1 )) # Reserve 1GB for System
 
 	if [ "$MAX_RAM" -le 4 ]; then
-
-		REC_GB=$(( $MAX_RAM - 1 )) # For 4GB or less, leave 1GB for the OS
-
+		REC_GB=$(( $MAX_RAM - 1 )) # For 4GB
 	elif [ "$MAX_RAM" -le 8 ]; then
-
-		REC_GB=$(( $MAX_RAM - 2 )) # For 8GB, 4-6GB is usually the sweet spot
-
+		REC_GB=$(( $MAX_RAM - 2 )) # For 8GB
 	elif [ "$MAX_RAM" -le 16 ]; then
-
-		REC_GB=$(( $MAX_RAM - 4 )) # For 16GB, 12GB is plenty for most servers
-
+		REC_GB=$(( $MAX_RAM - 4 )) # For 16GB
 	else
-
 		# For high-spec, leave 25% or cap it (MC often hits diminishing returns above 16G)
 		REC_GB=$(( $MAX_RAM * 75 / 100 ))
+	fi
 
-fi
-
-# Ensure we don't result in 0 or negative (safety check)
-if [ "$REC_GB" -lt 1 ]; then REC_GB=1; fi
+# Ensure result NOT be 0 or negative
+	if [ "$REC_GB" -lt 1 ]; then REC_GB=1; fi
 
 
 	if [ "$silent" = true ]; then
@@ -406,99 +465,46 @@ if [ "$REC_GB" -lt 1 ]; then REC_GB=1; fi
 
 startsh() {
 
-	if [ "$silent" = true ]; then
+	local SCRIPT_FILE="$TARGET_DIR/start.sh"
 
-		echo "[SILENT] Creating start.sh"
-		echo "#!/bin/bash" >> start.sh # Shellbang
-
-		if [ "$recommended" = true ]; then
-
-			echo "[AMS] Applying Recommended Settings"
-
-				echo "RAM=$REC_RAM" >> start.sh
-				printf "\n" >> start.sh
-				echo "java -Xmx${REC_RAM}G -Xms${REC_RAM}G -jar ${TARGET_DIR}/server.jar" >> start.sh
-
-			echo "[AMS] Recommended Settings Applied"
-
-		else
-
-			echo "[AMS] Applying Chosen Settings"
-
-				echo "RAM=$RAM_SET" >> start.sh
-				printf "\n" >> start.sh
-				echo "java -Xmx${RAM_SET}G -Xms${RAM_SET}G -jar $TARGET_DIR/sever.jar" >> start.sh
-
-			echo "[AMS] Chosen Settings Applied"
-
-		fi
-
-		chmod 755 $TARGET_DIR/start.sh > /dev/null 2>&1
-		chmod +x $TARGET_DIR/start.sh > /dev/null 2>&1
-
-		echo "[AMS] start.sh is now executuble"
-
+	local FINAL_RAM
+	if [ "$recommended" = true ]; then
+		FINAL_RAM="$REC_RAM"
 	else
-
-		clear
-		printf "\n"
-		echo -- start.sh --
-		echo Creating Start.sh
-		echo --------------
-		printf "\n"
-		sleep 2
-		echo "#!/bin/bash" >> start.sh
-		sleep 1
-
-		if [ "$recommended" = true ]; then
-
-			echo -- Recommened --
-			echo "[AMS] Applying Recommended Settings"
-			echo ---------------
-			printf "\n"
-
-								echo "RAM=$REC_RAM" >> start.sh
-								printf "\n" >> start.sh
-								echo "java -Xmx${REC_RAM}G -Xms${REC_RAM}G -jar $TARGET_DIR/server.jar" >> start.sh
-
-			sleep 2
-			echo -- Done --
-			echo "[AMS] Recommended Settings Applied"
-			echo ----------
-			printf "\n"
-			sleep 4
-
-		else
-
-			echo -- Chosen --
-			echo "[AMS] Applying Chosen Settings"
-			echo ------------
-			printf "\n"
-
-								echo "RAM=$RAM_SET" >> start.sh
-								printf "\n" >> start.sh
-								echo "java -Xmx${RAM_SET}G -Xms${RAM_SET}G -jar $TARGET_DIR/sever.jar" >> start.sh
-
-			sleep 2
-			echo -- Done --
-			echo "[AMS] Chosen Settings Applied"
-			echo ----------
-			sleep 4
-
-		fi
-
-		chmod 755 $TARGET_DIR/start.sh
-		chmod +x $TARGET_DIR/start.sh
-
-		printf "\m"
-
-		echo -- Ready --
-		echo "[AMS] start.sh is now executuble"
-		echo -----------
-
-		sleep 4
-
+		FINAL_RAM="$RAM_SET"
 	fi
+
+	if [ -z "$FINAL_RAM" ]; then
+        echo "[ERROR] RAM value is missing. Cannot create start.sh" >&2
+        exit 1
+    fi
+
+
+	cat <<EOF > "$SCRIPT_FILE"
+#!/bin/bash
+# Generated by AMS.sh
+RAM=${FINAL_RAM}
+java -Xmx\${RAM}G -Xms\${RAM}G -jar "$TARGET_DIR/server.jar"
+EOF
+
+	chmod +x "$SCRIPT_FILE" || { echo "[ERROR] Failed to make start.sh executable"; exit 1; }
+
+
+	if [ "$silent" = true ]; then
+        echo "[SILENT] start.sh created with ${FINAL_RAM}GB RAM"
+    else
+        clear
+        echo "-- Start.sh ----"
+        echo "Creating Launcher"
+        echo "----------------"
+        sleep 1
+        echo "Settings: ${FINAL_RAM}GB RAM"
+        echo "Path: $SCRIPT_FILE"
+        echo "----------------"
+        echo "SUCCESS: start.sh is ready!"
+        sleep 2
+    fi
+
 
 }
 
@@ -524,7 +530,7 @@ finish() {
 		echo
 		echo -- Start Server --
 		echo "To start your server, please execute the start.sh file found in : "
-		echo $TARGET_DIR/start.sh
+		echo "$TARGET_DIR"/start.sh
 		echo -- More --
 		echo "More Settings related to the server in server.properties"
 		echo ------------------
@@ -545,6 +551,7 @@ stop() {
 	else
 
 		clear
+		echo adioso~
 		exit
 
 	fi
