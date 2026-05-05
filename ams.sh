@@ -1,12 +1,60 @@
 #!/bin/bash
-# This script is licened under GNU 3.0 General Public License
-# Script Version = v0.5
-# Made by Glaz - Glazzite
+
+: '
+Automated Minecraft Server - ams.sh
+
+-> Linux (Ubuntu/Debain)
+-> Minecraft Java Edition
+-> Script Version = v0.6
+-> MC Server Version = 26.1.1
+
+This script is licened under GNU 3.0 General Public License
+> Terminal : {directory}/ams.sh -l
+> More info in https://www.gnu.org/licenses/
+
+Made by Glaz
+@Glazzite
+'
+
+# -- Color --
+
+# Reset
+NC='\033[0m'       # No Color
+
+# Regular Colors
+Black='\033[0;30m'        # Black
+Red='\033[0;31m'          # Red
+Green='\033[0;32m'        # Green
+Yellow='\033[0;33m'       # Yellow
+Blue='\033[0;34m'         # Blue
+Purple='\033[0;35m'       # Purple
+Cyan='\033[0;36m'         # Cyan
+White='\033[0;37m'        # White
+
+# Bold
+BBlack='\033[1;30m'       # Black
+BRed='\033[1;31m'         # Red
+BGreen='\033[1;32m'       # Green
+BYellow='\033[1;33m'      # Yellow
+BBlue='\033[1;34m'        # Blue
+BPurple='\033[1;35m'      # Purple
+BCyan='\033[1;36m'        # Cyan
+BWhite='\033[1;37m'       # White
+
+# Background
+BGBlack='\033[40m'       # Black
+BGRed='\033[41m'         # Red
+BGGreen='\033[42m'       # Green
+BGYellow='\033[43m'      # Yellow
+BGBlue='\033[44m'        # Blue
+BGPurple='\033[45m'      # Purple
+BGCyan='\033[46m'        # Cyan
+BGWhite='\033[47m'       # White
 
 
 # -- Flags/Options --
 
-while getopts 'rushv' option; do
+while getopts 'rushvlc' option; do
 	case $option in
 
 		# Variable-Based
@@ -16,45 +64,131 @@ while getopts 'rushv' option; do
 
 		h)	# Help/Manual
 			printf "\n"
-			echo "[AMS] Help/Manual"
-			echo "[USAGE] sudo {directory}/ams.sh [Option]"
+			echo -e "[${BBlue}AMS${NC}] ${BGreen}Help/Manual${NC}"
+			echo -e "[${BBlue}USAGE${NC}] sudo {directory}/ams.sh [Option]"
+
 			printf "\n"
-			echo "Flags/Options :"
+
+			echo -e "${BYellow}Flags/Options${NC} :"
+
 			printf "\n"
-			echo	"-s -> Silent"
+
+			echo -e	"-s -> ${Yellow}Silent${NC}"
 			echo 		"Silents all outputs and produces a simpler output instead"
 			printf "\n"
-			echo	"-r -> Recommended"
+
+			echo -e	"-r -> ${Green}Recommended${NC}"
 			echo		"Auto-selects all recommended settings without any user interaction."
-			echo 		"Pairs best with -s (silent)"
+			echo		"Pairs best with -s (silent)"
 			printf "\n"
-			echo	"-u -> Update"
-			echo 		"Updates the script to the latest version available via Git"
+
+			echo -e "-l -> ${Cyan}License${NC}"
+			echo 		"Provides the licence in use of the script."
 			printf "\n"
-			echo 	"-h -> Help"
+
+			echo -e	"-c -> ${Red}Changelog${NC}"
+			echo		"Displays the script's change log over versions."
+			printf "\n"
+
+			echo -e	"-u -> ${Purple}Update${NC}"
+			echo		"Updates the script to the latest version available via Git"
+			printf "\n"
+
+			echo -e	"-h -> ${Blue}Help${NC}"
 			echo		"Displays this help guide"
 			printf "\n"
+
 			exit 0
 			;;
 
 		v)	# Version of the Script
 			printf "\n"
-			echo "[VER] ams.sh v0.5"
-			echo "[STATUS] Alpha"
+			echo -e "[${BBlue}VER${NC}] ams.sh v0.6"
+			echo -e "[${BYellow}STATUS${NC}] Alpha"
 			printf "\n"
+			exit 0
+			;;
+
+		l)	# Licensing Info
+			printf "\n"
+			echo -e "${BGreen}GNU 3.0 General Public License${NC}
+
+ams.sh Copyright (C) 2026  Glazzite
+This program comes with ${Red}ABSOLUTELY NO WARRANTY${NC};
+This is ${Green}free software${NC}, and you are welcome to ${Yellow}redistribute it${NC}
+under ${Red}certain conditions${NC}.
+More info in ${Blue}https://www.gnu.org/licenses/${NC}
+"
+			exit 0
+			;;
+
+		c)	#changelog
+			printf "\n"
+			echo -e "${BGreen}Changelog of ams.sh${NC}
+
+${BGreen}v0.6${NC} [May 5 2026]
+${BBlue}Decor${NC}
+
+Added Color Variables for UI
+Added Changelog Option [ -c ]
+Added License Option [ -l ]
+Cleaned Up Code
+
+
+${BGreen}v0.5${NC} [April 20 2026]
+${BRed}Error Handling${NC}
+
+Added Error Handling for All Functions
+start() : 70+ Lines -> <30 Lines
+Fixed Typos
+
+
+${BGreen}v0.4${NC} [April 19 2026]
+${BPurple}Ram Allocation + start.sh${NC}
+
+Added Ram Allocation Logic
+Both Recommended & User-Choice
+Full Support with -sr options
+Loops & Cases was used
+Added of Creation of start.sh (which is a script preconfigured with the flags appropriate to the user to run the server)
+Full Script is Usable Again
+
+
+${BGreen}v0.3${NC} [April 5 2026]
+${BCyan}Flags/Options${NC}
+
+Added Flag/Option Support
+Flags : -h -r -u -s -v
+Cleaned up Output Echo
+Removed a few comments
+
+
+${BGreen}v0.2${NC} [April 4 2026]
+${BWhite}Functions${NC}
+
+Added function support for important segments
+Removed # -- XYZ -- comments
+
+
+${BGreen}v0.1${NC} [April 4 2026]
+
+v0.1 has been released.
+Basic Bash Script
+"
 			exit 0
 			;;
 
 		*)	# Missed/Invalid Option
 			printf "\n"
-			echo "[AMS] Invalid Option Used."
-			echo "[USAGE] sudo {directory}/ams.sh [Option]"
-			echo "[HELP] Use option -h to for help"
+			echo -e "[${BBlue}AMS${NC}] Invalid Option Used."
+			echo -e "[${BBlue}USAGE${NC}] sudo {directory}/ams.sh [Option]"
+			echo -e "[${BGreen}HELP${NC}] Use option -h to for help"
 			printf "\n"
 			exit 0
 			;;
 	esac
 done
+
 
 
 # -- Functions --
@@ -65,7 +199,7 @@ banner() {
 
 	if [ "$silent" = true ]; then
 
-		echo "[SILENT] Banner Art Skipped"
+		echo -e "[${BYellow}SILENT${NC}] Banner Art ${Red}Skipped${NC}"
 
 	else
 
@@ -92,31 +226,31 @@ intro() {
 
 	if [ "$silent" = true ]; then
 
-		echo "[SILENT] Intro Skipped"
+		echo -e "[${BYellow}SILENT${NC}] Intro ${Red}Skipped${NC}"
 
 	else
 
 		printf "\n"
 		echo -- Intro --
-		echo AMS.sh - Automated Minecraft Server
-		echo This script will automate an entire setup of a default, vanilla Minecraft server
-		echo "...in just a script."
+		echo -e "${Green}AMS.sh${NC} - ${BGreen}Automated Minecraft Server${NC}"
+		echo -e "This script will ${Green}automate an entire setup${NC} of a default, ${Blue}vanilla Minecraft server${NC}"
+		echo -e "...in just a ${BRed}single script${NC}."
 		echo ----------
 		echo
 		read -p "Press any key to continue..."
 		echo
 		echo -- Licensing --
-		echo This script is licened under GNU 3.0 General Public License
-		echo "For info > https://www.gnu.org/licenses/"
+		echo -e "This script is ${BGreen}licened${NC} under ${BCyan}GNU 3.0 General Public License${NC}"
+		echo -e "For info > ${Blue}https://www.gnu.org/licenses/${NC}"
 		echo --------------
 		echo
 		read -p "Press any key to continue..."
 		echo
 		echo -- Info --
-		echo "For Linux (Ubuntu/Debian)"
-		echo "Script Version : v0.5"
-		echo "Minecraft Server Version : 26.1.1"
-		echo "Made by Glaz (@glazzite)"
+		echo -e "OS :${BYellow}Linux${NC} (${Yellow}Ubuntu${NC}/${Red}Debian${NC})"
+		echo -e "Script ${BYellow}Version${NC} : ${Green}v0.6${NC} (${Yellow}Alpha${NC})"
+		echo -e "Minecraft ${BYellow}Server Version${NC} : ${Green}26.1.1${NC}"
+		echo -e "Made by ${BWhite}Glaz${NC} (${Blue}@glazzite${NC})"
 		echo ----------
 		printf "\n"
 		read -p "Press any key to start the script"
@@ -134,34 +268,34 @@ script_dir() {
 
 
 	if [ -z "$REAL_HOME" ]; then
-		echo "[ERROR] Home Directory for $REAL_USER Cannot be Found" >&2
+		echo -e "[${BRed}ERROR${NC}] Home Directory for $REAL_USER Cannot be Found" >&2
 		exit 1
 	fi
 
 	TARGET_DIR="$REAL_HOME/ams"
-	mkdir -p "$TARGET_DIR" || { echo "[ERROR] Failed to create $TARGET_DIR"; exit 1; }
+	mkdir -p "$TARGET_DIR" || { echo -e "[${BRed}ERROR${NC}] Failed to create $TARGET_DIR"; exit 1; }
 
 	if [ "$EUID" -eq 0 ]; then
-		chown "$REAL_USER:$REAL_USER" "$TARGET_DIR" || { echo "ERROR: Failed to set permissions"; exit 1; }
+		chown "$REAL_USER:$REAL_USER" "$TARGET_DIR" || { echo -e "[${BRed}ERROR${NC}] Failed to set permissions"; exit 1; }
 	fi
 
-	cd "$TARGET_DIR" || { echo "[ERROR] Could not enter $TARGET_DIR"; exit 1; }
+	cd "$TARGET_DIR" || { echo -e "[${BRed}ERROR${NC}] Could not enter $TARGET_DIR"; exit 1; }
 
 	# UI Output
 	if [ "$silent" = true ]; then
 
-		echo "[SILENT] Directory ready at $TARGET_DIR"
+		echo -e "[${BYellow}SILENT${NC}] Directory ${Green}ready${NC} at ${BBlue}${TARGET_DIR}${NC}"
 
 	else
 
 		clear
 		printf "\n"
 		echo -- Script Dir --
-		echo Setting up Script Directory...
+		echo -e "${BGreen}Setting up Script Directory${NC}..."
 		echo ----------------
 		printf "\n"
 		sleep 1
-		echo "Directory Created & Verified : $TARGET_DIR"
+		echo -e "[${BBlue}AMS${NC}] Directory ${Green}Created & Verified${NC} : ${BBlue}${TARGET_DIR}${NC}"
 		sleep 2
 
 	fi
@@ -171,24 +305,24 @@ install_java() {
 
 	if [ "$silent" = true ]; then
 
-		echo "[SILENT] Updating package lists..."
+		echo -e "[${BYellow}SILENT${NC}] ${Green}Updating${NC} package lists..."
         apt-get update -y > /dev/null 2>&1
-		echo "[SILENT] Installing Java Runtime"
-		apt-get install default-jdk openjdk-25-jdk -y > /dev/null 2>&1 || { echo "[ERROR] Java installation failed"; exit 1; }
-		echo "[SILENT] Java Installed"
+		echo -e "[${BYellow}SILENT${NC}] ${Yellow}Installing${NC} Java Runtime"
+		apt-get install default-jdk openjdk-25-jdk -y > /dev/null 2>&1 || { echo "[${BRed}ERROR${NC}] Java installation failed"; exit 1; }
+		echo -e "[${BYellow}SILENT${NC}] Java ${Green}Installed${NC}"
 
 	else
 
 		clear
 		printf "\n"
 		echo -- Update --
-		echo Updating Package Repository
+		echo -e "${BGreen}Updating Package Repository${NC}"
 		echo ------------
         apt-get update -y
 		sleep 1
 		printf "\n"
 		echo -- Java --
-		echo Installing Required Java Versions...
+		echo -e "${BGreen}Installing Required Java Versions${NC}..."
 		echo ----------
 		printf "\n"
 		sleep 2
@@ -196,10 +330,10 @@ install_java() {
 		# default-jdk = Java 21
 		# openjdk-25-jdk = Java 25 (experimental version)
 		if apt-get install default-jdk openjdk-25-jdk -y; then
-            echo "[SUCCESS] Java versions installed."
+            echo -e "[${BBlue}AMS${NC}] Java versions ${Green}installed${NC}."
             sleep 2
         else
-            echo "[ERROR] Failed to install Java packages." >&2
+            echo -e "[${BRed}ERROR${NC}] Failed to install Java packages." >&2
             exit 1
         fi
 		sleep 1
@@ -214,25 +348,25 @@ download_mcserver() {
 
 	if [ "$silent" = true ]; then
 
-		echo "[SILENT] Downloading server.jar"
-		curl -fsSl -o "$JAR_PATH" "$JAR_URL" || { echo "[ERROR] Download failed"; exit 1; }
-		echo "[SILENT] server.jar Downloaded"
+		echo -e "[${BYellow}SILENT${NC}] ${Yellow}Downloading${NC} server.jar"
+		curl -fsSl -o "$JAR_PATH" "$JAR_URL" || { echo "[${BRed}ERROR${NC}] Download failed"; exit 1; }
+		echo -e "[${BYellow}SILENT${NC}] server.jar ${Green}Downloaded${NC}"
 
 	else
 
 		clear
 		printf "\n"
 		echo -- Download --
-		echo Downloading MC 26.1.1 Server.jar
+		echo -e "${BGreen}Downloading MC 26.1.1 Server.jar${NC}"
 		echo --------------
 		printf "\n"
 		sleep 2
 		# Given link is the direct link to download the .jar file
 		if curl -fL --progress-bar -o "$JAR_PATH" "$JAR_URL"; then
-            echo "Download Complete: $JAR_PATH"
+            echo -e "[${BBlue}AMS${NC}] Download ${Green}Complete${NC}: $JAR_PATH"
             sleep 2
         else
-            echo "[ERROR] Failed to download server.jar. Check your internet." >&2
+            echo -e "[${BRed}ERROR${NC}] Failed to download server.jar. Check your internet." >&2
             exit 1
         fi
 		sleep 2
@@ -240,7 +374,7 @@ download_mcserver() {
 	fi
 
 	if [ ! -s "$JAR_PATH" ]; then
-        echo "[ERROR] Downloaded file is empty or missing!" >&2
+        echo -e "[${BRed}ERROR${NC}] Downloaded file is empty or missing!" >&2
         exit 1
     fi
 
@@ -253,17 +387,17 @@ mcserver() {
 
 	if [ "$silent" = true ]; then
 
-		echo "[SILENT] Setting up MC Server"
+		echo -e "[${BYellow}SILENT${NC}] ${Yellow}Setting up${NC} MC Server"
 		java -Xmx1024M -Xms1024M -jar server.jar > /dev/null 2>&1
 
 		if [ ! -f "$EULA" ]; then
-            echo "[ERROR] eula.txt was not generated!" >&2
+            echo -e "[${BRed}ERROR${NC}] eula.txt was not generated!" >&2
             exit 1
         fi
 
 		sed -i 's/eula=false/eula=true/' "$EULA"
 		sed -i 's/motd=.*/motd=Made By ams.sh/' "$PROP_FILE" 2>/dev/null
-		echo "[SILENT] EULA Accepted & MOTD set."
+		echo -e "[${BYellow}SILENT${NC}] EULA ${Green}Accepted${NC} & MOTD ${Green}set${NC}."
 
 
 
@@ -272,7 +406,7 @@ mcserver() {
 		clear
 		printf "\n"
 		echo -- Server --
-		echo "Setting up Server & and its properties..."
+		echo -e "${BGreen}Setting up Server & and its properties...${NC}"
 		echo ------------
 		printf "\n"
 
@@ -284,17 +418,17 @@ mcserver() {
 		java -Xmx1024M -Xms1024M -jar server.jar
 
 		if [ -f "$EULA_FILE" ]; then
-            echo "Accepting EULA and customizing properties..."
+            echo -e "[${BBlue}AMS${NC}] ${Green}Accepting${NC} EULA and ${Yellow}customizing${NC} properties..."
             sed -i 's/eula=false/eula=true/' "$EULA"
 
             if [ -f "$PROP_FILE" ]; then
                 sed -i 's/motd=.*/motd=Made By ams.sh/' "$PROP_FILE"
             fi
 
-            echo "Setup Complete!"
+            echo -e "[${BBlue}AMS${NC}] Setup ${Green}Complete${NC}!"
             sleep 2
         else
-            echo "[ERROR]: Server failed to generate $EULA" >&2
+            echo -e "[${BRed}ERROR${NC}] Server failed to generate $EULA" >&2
             exit 1
         fi
 		sleep 2
@@ -326,45 +460,45 @@ ram_allocate() {
 
 	if [ "$silent" = true ]; then
 
-		echo "[SILENT] Detecting System RAM for Allocation"
-		echo "[AMS] RAM Variable Updated"
+		echo -e "[${BYellow}SILENT${NC}] Detecting System RAM for ${Yellow}Allocation${NC}"
+		echo -e "[${BBlue}AMS${NC}] RAM Variable ${Green}Updated${NC}"
 
 		if [ "$recommended" = true ]; then
-			echo "[AMS] Applying Recommended RAM"
+			echo -e "[${BBlue}AMS${NC}] ${Yellow}Applying${NC} Recommended RAM"
 
 				REC_RAM=$REC_GB
 
-			echo "[AMS] Recommened RAM Allocated"
+			echo -e "[${BBlue}AMS${NC}] Recommened RAM ${Green}Allocated${NC}"
 
 		else
 
 			if [ -z "$RAM_SET" ]; then
 
-				echo "[SILENT] Detecting System RAM for Allocation"
-				echo "[AMS] Total System RAM : ${TOTAL_GB}GB"
-				echo "[AMS] Usable System RAM : ${MAX_RAM}GB"
+				echo -e "[${BYellow}SILENT${NC}] Detecting ${Yellow}System RAM${NC} for ${Green}Allocation${NC}"
+				echo -e "[${BBlue}AMS${NC}] ${Blue}Total${NC} System RAM : ${TOTAL_GB}GB"
+				echo -e "[${BBlue}AMS${NC}] ${Purple}Usable${NC} System RAM : ${MAX_RAM}GB"
 
 				while true; do
 
-					read -p "[AMS] Enter RAM amount in GB: " USER_RAM
+					read -p "Enter RAM amount in GB: " USER_RAM
 
 						# 1. Check if it's a number
 						if ! [[ "$USER_RAM" =~ ^[0-9]+$ ]]; then
-							echo "--> Error: Please enter a whole number (e.g., 8)."
+							echo -e "[${BRed}ERROR${NC}] Please enter a whole number (e.g., 8)."
 							printf "\n"
 						continue # Restarts the loop
 						fi
 
 						# 2. Check if it exceeds Max RAM
 						if [ "$USER_RAM" -gt "$MAX_RAM" ]; then
-							echo "--> Error: Exceeded System RAM. Max allowed is ${MAX_RAM}GB."
+							echo -e "[${BRed}ERROR${NC}] Exceeded System RAM. Max allowed is ${MAX_RAM}GB."
 							printf "\n"
 						continue # Restarts the loop
 						fi
 
 						# 3. If it passes both, set and break
 						RAM_SET=$USER_RAM
-						echo "Success: RAM set to ${RAM_SET}GB."
+						echo -e "[${BBlue}AMS${NC}] RAM set to ${RAM_SET}GB."
 						break # This exits the WHILE loop so the script can continue
 				done
 
@@ -376,7 +510,7 @@ ram_allocate() {
 		clear
 		printf "\n"
 		echo -- Allocation --
-		echo Detecting System RAM
+		echo -e "${BGreen}Detecting System RAM${NC}"
 		echo --------------
 		printf "\n"
 		sleep 2
@@ -390,7 +524,7 @@ ram_allocate() {
 			if [ "$recommended" = true ]; then
 
 				echo "-- -r Option --"
-				echo "Automatically Choosing Recommened RAM"
+				echo -e "${BGreen}Automatically Choosing Recommened RAM${NC}"
 				echo -----------------
 				printf "\n"
 				sleep 1
@@ -403,7 +537,7 @@ ram_allocate() {
 			else
 
 				echo -- Choosing --
-				echo Choose whether to use Recommened or User-chosen
+				echo -e "${BGreen}Choose whether to use Recommened or User-chosen${NC}"
 				echo --------------
 				printf "\n"
 				sleep 2
@@ -423,7 +557,7 @@ ram_allocate() {
 						[Yy]*)
 								clear
 								printf "\n"
-								echo "Proceeding with recommended settings..."
+								echo -e "[${BBlue}AMS${NC}] Proceeding with ${Greemn}recommended${NC} settings..."
 								sleep 2
 								REC_RAM=$REC_GB
 								sleep 2
@@ -433,26 +567,26 @@ ram_allocate() {
 						[Nn]*)
 								clear
 								printf "\n"
-								echo "Manual selection triggered."
+								echo -e "[${BBlue}AMS${NC}] ${Yellow}Manual${NC} selection triggered."
 								sleep 2
 
 								while true; do
-										read -p "[AMS] Enter RAM amount in GB: " USER_RAM
+										read -p "Enter RAM amount in GB: " USER_RAM
 
 										if ! [[ "$USER_RAM" =~ ^[0-9]+$ ]]; then
-											echo "--> Error: Please enter a valid number."
+											echo -e "[${BRed}ERROR${NC}] Please enter a valid number."
 										elif [ "$USER_RAM" -gt "$MAX_RAM" ]; then
-											echo "--> Error: Exceeded System RAM. Max is ${MAX_RAM}GB."
+											echo -e "[${BRed}ERROR${NC}] Exceeded System RAM. Max is ${MAX_RAM}GB."
 										else
 											RAM_SET=$USER_RAM
-											break 2 # "break 2" exits BOTH the inner while and the outer while loop
+											break 2 # "2" = Exits BOTH the inner while and the outer while loop
 										fi
 								done
 								;;
 
 							*)
 								clear
-								echo "Invalid input: '$PICKRAM'. Please enter 'y' for yes or 'n' for no."
+								echo -e "[${BRed}ERROR${NC}] '$PICKRAM'. Please enter 'y' for yes or 'n' for no."
 								echo ""
 								sleep 1
 								;;
@@ -466,8 +600,8 @@ ram_allocate() {
 startsh() {
 
 	local SCRIPT_FILE="$TARGET_DIR/start.sh"
-
 	local FINAL_RAM
+
 	if [ "$recommended" = true ]; then
 		FINAL_RAM="$REC_RAM"
 	else
@@ -475,7 +609,7 @@ startsh() {
 	fi
 
 	if [ -z "$FINAL_RAM" ]; then
-        echo "[ERROR] RAM value is missing. Cannot create start.sh" >&2
+        echo -e "[${BRed}ERROR${NC}] RAM value is missing. Cannot create start.sh" >&2
         exit 1
     fi
 
@@ -487,21 +621,21 @@ RAM=${FINAL_RAM}
 java -Xmx\${RAM}G -Xms\${RAM}G -jar "$TARGET_DIR/server.jar"
 EOF
 
-	chmod +x "$SCRIPT_FILE" || { echo "[ERROR] Failed to make start.sh executable"; exit 1; }
+	chmod +x "$SCRIPT_FILE" || { echo -e "[${BRed}ERROR${NC}] Failed to make start.sh executable"; exit 1; }
 
 
 	if [ "$silent" = true ]; then
-        echo "[SILENT] start.sh created with ${FINAL_RAM}GB RAM"
+        echo -e "[${BYellow}SILENT${NC}] start.sh created with ${Green}${FINAL_RAM}GB RAM${NC}"
     else
         clear
         echo "-- Start.sh ----"
-        echo "Creating Launcher"
+        echo -e "${BGreen}Creating Launcher${NC}"
         echo "----------------"
         sleep 1
         echo "Settings: ${FINAL_RAM}GB RAM"
         echo "Path: $SCRIPT_FILE"
         echo "----------------"
-        echo "SUCCESS: start.sh is ready!"
+        echo -e "[${BBlue}AMS${NC}] start.sh is ready!"
         sleep 2
     fi
 
@@ -513,26 +647,26 @@ finish() {
 
 	if [ "$silent" = true ]; then
 
-		echo "[SILENT] Your MC Server is located in $TARGET_DIR"
-		echo "[SILENT] To Start, run start.sh in $TARGET_DIR/start.sh"
-		echo "[SILENT] More Settings in server.properties"
+		echo -e "[${BYellow}SILENT${NC}] Your MC Server is located in ${BBlue}${TARGET_DIR}${NC}"
+		echo -e "[${BYellow}SILENT${NC}] To Start, run start.sh in ${BBlue}${TARGET_DIR}/start.sh${NC}"
+		echo -e "[${BYellow}SILENT${NC}] More Settings in ${BBlue}server.properties${NC}"
 
 	else
 
 		clear
 		printf "\n"
 		echo -- Script Done --
-		echo "Your Minecraft Server is Ready!"
-		echo "Your Minecraft Server is located in $TARGET_DIR"
+		echo -e "Your Minecraft Server is ${Green}Ready${NC}!"
+		echo -e "Your Minecraft Server is located in ${BBlue}${TARGET_DIR}${NC}"
 		echo ------------------
 		echo
 		read -p "Press any key to continue..."
 		echo
 		echo -- Start Server --
-		echo "To start your server, please execute the start.sh file found in : "
-		echo "$TARGET_DIR"/start.sh
+		echo -e "To ${Yellow}start your server${NC}, please execute the start.sh file found in : "
+		echo -e "$TARGET_DIR"/start.sh
 		echo -- More --
-		echo "More Settings related to the server in server.properties"
+		echo -e "More Settings related to the server in ${Blue}server.properties${NC}"
 		echo ------------------
 		printf "\n"
 		read -p "Press any key to finish..."
@@ -545,14 +679,14 @@ stop() {
 
 	if [ "$silent" = true ]; then
 
-		echo "[SILENT] Thank you."
+		echo -e "[${BYellow}SILENT${NC}] Thank you."
 		exit 0
 
 	else
 
 		clear
-		echo adioso~
-		exit
+		echo -e "[${BBlue}AMS${NC}] adioso~"
+		exit 0
 
 	fi
 }
@@ -560,9 +694,7 @@ stop() {
 
 
 
-
 # -- Start --
-
 
 banner
 intro
