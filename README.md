@@ -18,7 +18,7 @@
 
 <div align="center">
 
-ams.sh is a lightweight, deployment, bootstrap script designed to spin up a production-ready, Java Minecraft server in under 10 minutes. By condensing environment configuration, dependency management, and EULA automation into a single execution, it eliminates the friction of manual setup, delivering a clean, unbloated instance every time. 
+ams.sh is a lightweight, deployment, bootstrap script designed to spin up a production-ready, Java Minecraft server in under 5 minutes. By condensing environment configuration, dependency management, and EULA automation into a single execution, it eliminates the friction of manual setup, delivering a clean, unbloated instance every time. 
 
 </div>
 
@@ -29,7 +29,7 @@ There are 3 methods to download the script, all needing a bash commandline/termi
 
 ### 1. cURL (simplest)
 ```
-curl -sSL https://github.com/Glazzite/ams.sh/releases/download/v0.5/ams-v0.5.sh | bash
+curl -sSL https://github.com/Glazzite/ams.sh/releases/download/v0.6/ams-v0.6.sh | bash
 ```
 
 ### 2. Releases
@@ -99,7 +99,7 @@ Basics (v0.x)
 - [x] start.sh / Auto-Generated Script with Recommended/User-Choiced Flags - v0.4
 - [x] Ram Allocation Added - v0.4
 - [x] Error-Handling / Cleanup of Script - v0.5
-- [ ] Cleaner Decoratives v0.6
+- [x] Cleaner Decoratives v0.6
 - [ ] Package Manager Detector v0.7
 
 Minecraft Related
@@ -129,7 +129,7 @@ License under GNU 3.0 General Public License.
 # 🍵 Buy me some tea?
 Donating isn't necessary, just a reminder.
 
-> i hate caffeine.
+> i hate caffeine crash.
 
 # 🙏 Thank you!
 Have fun with the script!
