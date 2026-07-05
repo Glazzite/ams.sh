@@ -1,188 +1,222 @@
 #!/bin/bash
 
-: '
-Automated Minecraft Server - ams.sh
+# ─────────── [ ams.sh ] ─────────────────────────────────
+# Absolute Minecraft Strap (ams) v1.0
+# Made by Glaz @Glazzite
+# ────────────── [ Info ] ────────────────────────────────
+# Last Edited : July 5 2026
+# Purely on Bash/Shell
+# Licened under GNU 3.0 General Public License
+# >> https://www.gnu.org/licenses/
+# ────────────────────────────────────────────────────────
 
--> Linux (Ubuntu/Debain)
--> Minecraft Java Edition
--> Script Version = v0.6
--> MC Server Version = 26.1.1
+# ────────────── [ Linux Check ] ─────────────────────────
 
-This script is licened under GNU 3.0 General Public License
-> Terminal : {directory}/ams.sh -l
-> More info in https://www.gnu.org/licenses/
+if [ "$(uname)" != "Linux" ]; then
+    echo -e "${BRed}[FATAL ERROR]${NC} AMS is exclusively for Linux environments."
+    exit 1
+fi
 
-Made by Glaz
-@Glazzite
-'
+# ──────────────── [ UI ] ────────────────────────────────
 
-# -- Color --
+# ───────── [ Color ] ────────────
 
-# Reset
 NC='\033[0m'       # No Color
 
 # Regular Colors
-Black='\033[0;30m'        # Black
-Red='\033[0;31m'          # Red
-Green='\033[0;32m'        # Green
-Yellow='\033[0;33m'       # Yellow
-Blue='\033[0;34m'         # Blue
-Purple='\033[0;35m'       # Purple
-Cyan='\033[0;36m'         # Cyan
-White='\033[0;37m'        # White
+Black='\033[0;30m'
+Red='\033[0;31m'
+Green='\033[0;32m'
+Yellow='\033[0;33m'
+Blue='\033[0;34m'
+Purple='\033[0;35m'
+Cyan='\033[0;36m'
+White='\033[0;37m'
 
 # Bold
-BBlack='\033[1;30m'       # Black
-BRed='\033[1;31m'         # Red
-BGreen='\033[1;32m'       # Green
-BYellow='\033[1;33m'      # Yellow
-BBlue='\033[1;34m'        # Blue
-BPurple='\033[1;35m'      # Purple
-BCyan='\033[1;36m'        # Cyan
-BWhite='\033[1;37m'       # White
+BBlack='\033[1;30m'
+BRed='\033[1;31m'
+BGreen='\033[1;32m'
+BYellow='\033[1;33m'
+BBlue='\033[1;34m'
+BPurple='\033[1;35m'
+BCyan='\033[1;36m'
+BWhite='\033[1;37m'
 
-# Background
-BGBlack='\033[40m'       # Black
-BGRed='\033[41m'         # Red
-BGGreen='\033[42m'       # Green
-BGYellow='\033[43m'      # Yellow
-BGBlue='\033[44m'        # Blue
-BGPurple='\033[45m'      # Purple
-BGCyan='\033[46m'        # Cyan
-BGWhite='\033[47m'       # White
+# ───────── [ Center ] ────────────
 
+text() {
 
-# -- Flags/Options --
+    local text="$1"
+    local width=${COLUMNS:-$(tput cols 2>/dev/null || echo 80)}         # Takes the Terminal's current width using either COLUMS, tput or assuming it is 80 via echo
 
-while getopts 'rushvlc' option; do
-	case $option in
+    local clean_text=$(echo -e "$text" | sed 's/\x1b\[[0-9;]*m//g')     # This strips out the invisible characters that Color Variables uses, so it won't be counted as width
+    local text_len=${#clean_text}
 
-		# Variable-Based
-		r) recommended=true ;; # Uses Recommended Configs for Server
-		u) update=true ;; # Updates the Script
-		s) silent=true ;; # Hides all UI and gives simple prompts instead
+    if [ "$text_len" -ge "$width" ]; then              # If the text is greater than the width of the Terminal, then it will just return back, it won't crash the terminal
+        echo -e "$text"
+        return
+    fi
+
+    local padding=$(( (width - text_len) / 2 ))       # Calculating the padding required to get the input centered.
+
+    printf "%${padding}s" ""             # Apply said padding as nothing (as in spaces)
+    echo -e "$text"
+
+}
+
+# ──────────────── [ Flags ] ─────────────────────────────
+
+while getopts 'hvlc' options; do
+    case $options in
 
 		h)	# Help/Manual
 			printf "\n"
-			echo -e "[${BBlue}AMS${NC}] ${BGreen}Help/Manual${NC}"
-			echo -e "[${BBlue}USAGE${NC}] sudo {directory}/ams.sh [Option]"
+			echo -e "    [${BWhite}AMS${NC}] ${BGreen}Help/Manual${NC}"
+			echo -e "    [${BBlue}USAGE${NC}] {directory}/ams.sh [Option]"
 
 			printf "\n"
 
-			echo -e "${BYellow}Flags/Options${NC} :"
-
+			echo -e "        ${BYellow}Flags${NC} :"
 			printf "\n"
 
-			echo -e	"-s -> ${Yellow}Silent${NC}"
-			echo 		"Silents all outputs and produces a simpler output instead"
+			echo -e "    -l -> ${Cyan}Licence${NC}"
+			echo 	   "   Provides the licence in use of the script."
 			printf "\n"
 
-			echo -e	"-r -> ${Green}Recommended${NC}"
-			echo		"Auto-selects all recommended settings without any user interaction."
-			echo		"Pairs best with -s (silent)"
+			echo -e	"    -c -> ${Red}Changelog${NC}"
+			echo		"  Displays the script's change log over versions."
 			printf "\n"
 
-			echo -e "-l -> ${Cyan}License${NC}"
-			echo 		"Provides the licence in use of the script."
+			echo -e	"    -u -> ${Purple}Update${NC} [HASNT BEEN IMPLEMENTED YET]"
+			echo		"  Updates the script to the latest version available via Git."
 			printf "\n"
 
-			echo -e	"-c -> ${Red}Changelog${NC}"
-			echo		"Displays the script's change log over versions."
+			echo -e	"    -h -> ${Blue}Help${NC}"
+			echo		"  Displays this help guide."
 			printf "\n"
-
-			echo -e	"-u -> ${Purple}Update${NC}"
-			echo		"Updates the script to the latest version available via Git"
-			printf "\n"
-
-			echo -e	"-h -> ${Blue}Help${NC}"
-			echo		"Displays this help guide"
-			printf "\n"
-
+            printf "\n"
 			exit 0
 			;;
 
 		v)	# Version of the Script
 			printf "\n"
-			echo -e "[${BBlue}VER${NC}] ams.sh v0.6"
-			echo -e "[${BYellow}STATUS${NC}] Alpha"
+			echo -e "    [${BBlue}VER${NC}] ams.sh v1.0"
+			echo -e "    [${BYellow}STATUS${NC}] Release"
 			printf "\n"
 			exit 0
 			;;
 
 		l)	# Licensing Info
 			printf "\n"
-			echo -e "${BGreen}GNU 3.0 General Public License${NC}
+			echo -e "        ${BGreen}GNU 3.0 General Public License${NC}
 
-ams.sh Copyright (C) 2026  Glazzite
-This program comes with ${Red}ABSOLUTELY NO WARRANTY${NC};
-This is ${Green}free software${NC}, and you are welcome to ${Yellow}redistribute it${NC}
-under ${Red}certain conditions${NC}.
-More info in ${Blue}https://www.gnu.org/licenses/${NC}
+        Absolute Minecraft Strap Copyright (C) 2026 Glazzite
+        This program comes with ${Red}ABSOLUTELY NO WARRANTY${NC};
+        This is ${Green}free software${NC}, and you are welcome to ${Yellow}redistribute it${NC}
+        under ${Red}certain conditions${NC}.
+        More info in ${Blue}https://www.gnu.org/licenses/${NC}
 "
 			exit 0
 			;;
 
-		c)	#changelog
+		c)	# Changelog
 			printf "\n"
-			echo -e "${BGreen}Changelog of ams.sh${NC}
+			echo -e "        ${BGreen}Changelog of ams.sh${NC}
 
-${BGreen}v0.6${NC} [May 5 2026]
-${BBlue}Decor${NC}
+    ${BGreen}v0.1${NC} [April 4 2026]
 
-Added Color Variables for UI
-Added Changelog Option [ -c ]
-Added License Option [ -l ]
-Cleaned Up Code
+        v0.1 has been released.
+        Basic Bash Script
+
+    ${BGreen}v0.2${NC} [April 4 2026]
+    ${BWhite}Functions${NC}
+
+        Added function support for important segments
+        Removed # -- XYZ -- comments
+
+    ${BGreen}v0.3${NC} [April 5 2026]
+    ${BCyan}Flags/Options${NC}
+
+        Added Flag/Option Support
+        Flags : -h -r -u -s -v
+        Cleaned up Output Echo
+        Removed a few comments
+
+    ${BGreen}v0.4${NC} [April 19 2026]
+    ${BPurple}Ram Allocation + start.sh${NC}
+
+        Added Ram Allocation Logic
+        Both Recommended & User-Choice
+        Full Support with -sr options
+        Loops & Cases was used
+        Added of Creation of start.sh
+        Full Script is Usable Again
+
+    ${BGreen}v0.5${NC} [April 20 2026]
+    ${BRed}Error Handling${NC}
+
+        Added Error Handling for All Functions
+        start() : 70+ Lines -> <30 Lines
+        Fixed Typos
+
+    ${BGreen}v0.6${NC} [May 5 2026]
+    ${BBlue}Decor${NC}
+
+        Added Color Variables for UI
+        Added Changelog Option [ -c ]
+        Added License Option [ -l ]
+        Cleaned Up Code
+
+    ${BGreen}v1.0${NC} [July 5 2026]
+    ${BYellow}Release$NC
+
+        ams.sh was renamed to 'Absolute Minecraft Strap'.
+        ams.sh was moved to 'Release' status.
+        Complete Redo from scratch
+
+        ──────────── [ UI ] ─────────────
+        Massive UI Overhaul.
+        Centered UI Elements via 'text()' function.
+        Replaced '----' to '───'.
+        Added Interactive Pages for user inputs beforehand.
+        Comments were added.
+        Proper divisions of code was implemented.
+
+        ───── [ Extended Support ] ──────
+        Engines/API Accessed JAR Downloading were added.
+        Vanilla / Fabric / Paper support was introduced.
+        Multi-MC Version support was introduced.
+        apt / dnf / pacman / yay support was introduced.
+
+        ───────── [ Bug Fixes ] ──────────
+        Superuser bug was fixed using "sudo -v".
+        It is not required to use sudo with ams.sh anymore.
+
+        ─────────── [ Misc. ] ─────────────
+        Environment parameters for creating a directory was removed.
+        RAM Allocation logic was simplified.
+        run.sh was simplified.
+        Pre-defined Variables was introduced.
+        ASCII art was changed to 'Diamfont'.
+        New PKGs to Install : java, jq
+        Starting comment was reduced.
+        Background Color Variables was removed.
+        Silent & Recommended Flags were removed.
+        Spacing was made in Flags.
+        Changelog order was reversed.
+        Small licensing change to accompany the new name.
 
 
-${BGreen}v0.5${NC} [April 20 2026]
-${BRed}Error Handling${NC}
-
-Added Error Handling for All Functions
-start() : 70+ Lines -> <30 Lines
-Fixed Typos
-
-
-${BGreen}v0.4${NC} [April 19 2026]
-${BPurple}Ram Allocation + start.sh${NC}
-
-Added Ram Allocation Logic
-Both Recommended & User-Choice
-Full Support with -sr options
-Loops & Cases was used
-Added of Creation of start.sh (which is a script preconfigured with the flags appropriate to the user to run the server)
-Full Script is Usable Again
-
-
-${BGreen}v0.3${NC} [April 5 2026]
-${BCyan}Flags/Options${NC}
-
-Added Flag/Option Support
-Flags : -h -r -u -s -v
-Cleaned up Output Echo
-Removed a few comments
-
-
-${BGreen}v0.2${NC} [April 4 2026]
-${BWhite}Functions${NC}
-
-Added function support for important segments
-Removed # -- XYZ -- comments
-
-
-${BGreen}v0.1${NC} [April 4 2026]
-
-v0.1 has been released.
-Basic Bash Script
 "
 			exit 0
 			;;
 
 		*)	# Missed/Invalid Option
 			printf "\n"
-			echo -e "[${BBlue}AMS${NC}] Invalid Option Used."
-			echo -e "[${BBlue}USAGE${NC}] sudo {directory}/ams.sh [Option]"
-			echo -e "[${BGreen}HELP${NC}] Use option -h to for help"
+			echo -e "    [${BWhite}AMS${NC}] Invalid Option Used."
+			echo -e "    [${BBlue}USAGE${NC}] {directory}/ams.sh [Option]"
+			echo -e "    [${BGreen}HELP${NC}] Use option -h to for help"
 			printf "\n"
 			exit 0
 			;;
@@ -190,521 +224,502 @@ Basic Bash Script
 done
 
 
+# ───────────── [ Variables ] ────────────────────────────
 
-# -- Functions --
+mc_version=""
+loader=""
+pkgmgr=""
+final_ram=""
+server="$HOME/ams"
 
 
-banner() {
-	clear
+# ───────────── [ Functions ] ────────────────────────────
 
-	if [ "$silent" = true ]; then
-
-		echo -e "[${BYellow}SILENT${NC}] Banner Art ${Red}Skipped${NC}"
-
-	else
-
-		printf "\n"
-		echo
-		echo
-		echo "   █████████   ██████   ██████  █████████ ";
-		echo "  ███▒▒▒▒▒███ ▒▒██████ ██████  ███▒▒▒▒▒███";
-		echo " ▒███    ▒███  ▒███▒█████▒███ ▒███    ▒▒▒ ";
-		echo " ▒███████████  ▒███▒▒███ ▒███ ▒▒█████████ ";
-		echo " ▒███▒▒▒▒▒███  ▒███ ▒▒▒  ▒███  ▒▒▒▒▒▒▒▒███";
-		echo " ▒███    ▒███  ▒███      ▒███  ███    ▒███";
-		echo " █████   █████ █████     █████▒▒█████████ ";
-		echo "▒▒▒▒▒   ▒▒▒▒▒ ▒▒▒▒▒     ▒▒▒▒▒  ▒▒▒▒▒▒▒▒▒  ";
-		echo "                                          ";
-		echo "                                          ";
-		echo "                                          ";
-		printf "\n"
-
-	fi
-}
+# ────────── [ Start ] ────────────
 
 intro() {
 
-	if [ "$silent" = true ]; then
+	clear
+	printf "\n\n\n"
+	text "Absolute Minecraft Strap 1.0"
+	text "───────────────────────────────────────────────────────"
+	text "${BWhite} ▗▄▖ ▗▖  ▗▖ ▗▄▄▖"
+	text "▐▌ ▐▌▐▛▚▞▜▌▐▌   "
+	text "▐▛▀▜▌▐▌  ▐▌ ▝▀▚▖"
+	text "▐▌ ▐▌▐▌  ▐▌▗▄▄▞▘${NC}"
+	printf "\n"
+	text "────────────────────── [ Info ] ───────────────────────"
+	printf "\n"
+	text "${BGreen}Fastest way${NC} to ${BBlue}bootstrap a Minecraft server${NC} on Linux."
+	text "Made by ${BWhite}Glaz @Glazzite${NC} on ${Green}GitHub/YT/X${NC}"
+	text "${BYellow}Make sure to be connected to the Internet before use!${NC}"
+	printf "\n"
+	text "───────────────────── [ Licence ] ─────────────────────"
+	printf "\n"
+	text "${BGreen}Licened${NC} under ${BCyan}GNU 3.0 General Public License${NC}"
+	text "For info > ${Blue}https://www.gnu.org/licenses/${NC}"
+	printf "\n"
+	text "─── [ Proceed Here ] ──────────────────────────────────"
+	printf "\n"
+	printf "%26s" "" && read -p "Press Enter to continue... "
+	printf "\n\n"
 
-		echo -e "[${BYellow}SILENT${NC}] Intro ${Red}Skipped${NC}"
-
-	else
-
-		printf "\n"
-		echo -- Intro --
-		echo -e "${Green}AMS.sh${NC} - ${BGreen}Automated Minecraft Server${NC}"
-		echo -e "This script will ${Green}automate an entire setup${NC} of a default, ${Blue}vanilla Minecraft server${NC}"
-		echo -e "...in just a ${BRed}single script${NC}."
-		echo ----------
-		echo
-		read -p "Press any key to continue..."
-		echo
-		echo -- Licensing --
-		echo -e "This script is ${BGreen}licened${NC} under ${BCyan}GNU 3.0 General Public License${NC}"
-		echo -e "For info > ${Blue}https://www.gnu.org/licenses/${NC}"
-		echo --------------
-		echo
-		read -p "Press any key to continue..."
-		echo
-		echo -- Info --
-		echo -e "OS :${BYellow}Linux${NC} (${Yellow}Ubuntu${NC}/${Red}Debian${NC})"
-		echo -e "Script ${BYellow}Version${NC} : ${Green}v0.6${NC} (${Yellow}Alpha${NC})"
-		echo -e "Minecraft ${BYellow}Server Version${NC} : ${Green}26.1.1${NC}"
-		echo -e "Made by ${BWhite}Glaz${NC} (${Blue}@glazzite${NC})"
-		echo ----------
-		printf "\n"
-		read -p "Press any key to start the script"
-		printf "\n"
-
-	fi
 }
 
-script_dir() {
+# ───────── [ Config ] ────────────
 
-	# -- Enviroment Fix --
-	# Taking in Caller's home directory to prevent installing onto /root
-	REAL_USER="${SUDO_USER:-$USER}"
-	REAL_HOME=$(getent passwd "$REAL_USER" | cut -d: -f6)
+page1_loader() {
+
+	clear
+	printf "\n\n\n"
+	text "ams 1.0"
+	text "───────────────────────────────────────────────────────"
+	text "${Cyan}▗▖    ▗▄▖  ▗▄▖ ▗▄▄▄  ▗▄▄▄▖▗▄▄▖ "
+	text "▐▌   ▐▌ ▐▌▐▌ ▐▌▐▌  █ ▐▌   ▐▌ ▐▌"
+	text "▐▌   ▐▌ ▐▌▐▛▀▜▌▐▌  █ ▐▛▀▀▘▐▛▀▚▖"
+	text "▐▙▄▄▖▝▚▄▞▘▐▌ ▐▌▐▙▄▄▀ ▐▙▄▄▖▐▌ ▐▌${NC}"
+	printf "\n"
+	text "────────────────────── [ Info ] ───────────────────────"
+    printf "\n"
+    text "Pick which ${BGreen}Loader${NC} you wnat for ${BYellow}your${NC} Server."
+	text "Loader, as in, ${BBlue}Vanilla${NC} / ${BWhite}Fabric${NC} / ${BPurple}Paper${NC}."
+	text "If you ${BYellow}chose nothing${NC}, it will ${BRed}default${NC} to ${BGreen}Vanilla${NC}"
+	printf "\n"
+	text "───────────────────── [ Options ] ─────────────────────"
+	printf "\n"
+	text "[1] ${BBlue}Vanilla${NC} / ${BYellow}Snapshots${NC}"
+	text "[2] ${BWhite}Fabric${NC}             "
+	text "[3] ${BPurple}Paper${NC}              "
+	printf "\n"
+	text "─── [ Choose Here ] ───────────────────────────────────"
+	printf "\n"
+	printf "%26s" "" && read -p "Loader [1-3] : " pickloader
+	printf "\n\n"
+
+	case $pickloader in
+
+		2) loader="fabric" ;;
+		3) loader="paper" ;;
+		*) loader="vanilla" ;;
+
+	esac
 
 
-	if [ -z "$REAL_HOME" ]; then
-		echo -e "[${BRed}ERROR${NC}] Home Directory for $REAL_USER Cannot be Found" >&2
-		exit 1
-	fi
-
-	TARGET_DIR="$REAL_HOME/ams"
-	mkdir -p "$TARGET_DIR" || { echo -e "[${BRed}ERROR${NC}] Failed to create $TARGET_DIR"; exit 1; }
-
-	if [ "$EUID" -eq 0 ]; then
-		chown "$REAL_USER:$REAL_USER" "$TARGET_DIR" || { echo -e "[${BRed}ERROR${NC}] Failed to set permissions"; exit 1; }
-	fi
-
-	cd "$TARGET_DIR" || { echo -e "[${BRed}ERROR${NC}] Could not enter $TARGET_DIR"; exit 1; }
-
-	# UI Output
-	if [ "$silent" = true ]; then
-
-		echo -e "[${BYellow}SILENT${NC}] Directory ${Green}ready${NC} at ${BBlue}${TARGET_DIR}${NC}"
-
-	else
-
-		clear
-		printf "\n"
-		echo -- Script Dir --
-		echo -e "${BGreen}Setting up Script Directory${NC}..."
-		echo ----------------
-		printf "\n"
-		sleep 1
-		echo -e "[${BBlue}AMS${NC}] Directory ${Green}Created & Verified${NC} : ${BBlue}${TARGET_DIR}${NC}"
-		sleep 2
-
-	fi
 }
 
-install_java() {
 
-	if [ "$silent" = true ]; then
+page2_version() {
 
-		echo -e "[${BYellow}SILENT${NC}] ${Green}Updating${NC} package lists..."
-        apt-get update -y > /dev/null 2>&1
-		echo -e "[${BYellow}SILENT${NC}] ${Yellow}Installing${NC} Java Runtime"
-		apt-get install default-jdk openjdk-25-jdk -y > /dev/null 2>&1 || { echo "[${BRed}ERROR${NC}] Java installation failed"; exit 1; }
-		echo -e "[${BYellow}SILENT${NC}] Java ${Green}Installed${NC}"
+	clear
+	printf "\n\n\n"
+	text "ams 1.0"
+	text "──────────────────────────────────────────────────────"
+	text "${BGreen}▗▖  ▗▖ ▗▄▄▖    ▗▖  ▗▖▗▄▄▄▖▗▄▄▖  ▗▄▄▖▗▄▄▄▖ ▗▄▖ ▗▖  ▗▖"
+	text "▐▛▚▞▜▌▐▌       ▐▌  ▐▌▐▌   ▐▌ ▐▌▐▌     █  ▐▌ ▐▌▐▛▚▖▐▌"
+	text "▐▌  ▐▌▐▌       ▐▌  ▐▌▐▛▀▀▘▐▛▀▚▖ ▝▀▚▖  █  ▐▌ ▐▌▐▌ ▝▜▌"
+	text "▐▌  ▐▌▝▚▄▄▖     ▝▚▞▘ ▐▙▄▄▖▐▌ ▐▌▗▄▄▞▘▗▄█▄▖▝▚▄▞▘▐▌  ▐▌${NC}"
+	printf "\n"
+	text "───────────────────── [ Info ] ───────────────────────"
+	printf "\n"
+	text "Enter the ${BGreen}Minecraft Version${NC} you want for ${BYellow}your${NC} Server."
+	text "Regular ${BBlue}Releases${NC} & ${BPurple}Snapshots${NC} can be ${BGreen}entered${NC}."
+	text "If you ${BYellow}typed nothing${NC}, it will ${BRed}default${NC} to ${BGreen}1.21.11${NC}"
+	text "${Red}Snapshots can only be used in VANILLA${NC}"
+	printf "\n"
+	text "─── [ Enter Here ] ───────────────────────────────────"
+	printf "\n"
+	printf "%26s" "" && read -p "Version : " mc_version
+	printf "\n\n"
 
-	else
+		[ -z "$mc_version" ] && mc_version="1.21.11"
 
-		clear
-		printf "\n"
-		echo -- Update --
-		echo -e "${BGreen}Updating Package Repository${NC}"
-		echo ------------
-        apt-get update -y
-		sleep 1
-		printf "\n"
-		echo -- Java --
-		echo -e "${BGreen}Installing Required Java Versions${NC}..."
-		echo ----------
-		printf "\n"
-		sleep 2
-		# Requires Sudo
-		# default-jdk = Java 21
-		# openjdk-25-jdk = Java 25 (experimental version)
-		if apt-get install default-jdk openjdk-25-jdk -y; then
-            echo -e "[${BBlue}AMS${NC}] Java versions ${Green}installed${NC}."
-            sleep 2
+	printf "\n"
+
+}
+
+
+page3_pkg() {
+
+	clear
+	printf "\n\n\n"
+	text "ams 1.0"
+	text "───────────────────────────────────────────────────────"
+	text "${Blue}▗▄▄▖ ▗▖ ▗▖ ▗▄▄▖▗▖  ▗▖ ▗▄▄▖▗▄▄▖ "
+	text "▐▌ ▐▌▐▌▗▞▘▐▌   ▐▛▚▞▜▌▐▌   ▐▌ ▐▌"
+	text "▐▛▀▘ ▐▛▚▖ ▐▌▝▜▌▐▌  ▐▌▐▌▝▜▌▐▛▀▚▖"
+	text "▐▌   ▐▌ ▐▌▝▚▄▞▘▐▌  ▐▌▝▚▄▞▘▐▌ ▐▌${NC}"
+	printf "\n"
+	text "────────────────────── [ Info ] ───────────────────────"
+	printf "\n"
+	text "Pick your ${BPurple}distro's${NC}/${BWhite}desired${NC} package manager."
+	text "This is to ${BBlue}install${NC} ${BGreen}Java${NC} & ${BYellow}Jq${NC} to operate properly."
+	text "If you ${BYellow}typed nothing${NC}, it will ${BRed}default${NC} to ${BGreen}apt${NC}"
+	printf "\n"
+	text "───────────────────── [ Options ] ─────────────────────"
+	printf "\n"
+	text "[1] ${BGreen}apt${NC} - (Ubuntu/Debian)"
+	text "[2] ${BBlue}dnf${NC} - (Fedora)       "
+	text "[3] ${BWhite}pacman${NC} - (Arch)      "
+	text "[4] ${BYellow}yay${NC} - (Arch AUR)     "
+	printf "\n"
+	text "─── [ Choose Here ] ───────────────────────────────────"
+	printf "\n"
+	printf "%26s" "" && read -p "PKG [1-4] : " pickpkg
+	printf "\n\n"
+
+		case $pickpkg in
+
+			2) pkgmgr="dnf" ;;
+			3) pkgmgr="pacman" ;;
+			4) pkgmgr="yay" ;;
+			*) pkgmgr="apt" ;;
+
+		esac
+
+}
+
+
+page4_ram() {
+    local error_msg=""
+    local pickram=""
+    local user_ram=""
+
+    # It takes System RAM, take 1GB out for the system, and makes a recommendation for the user
+
+    local total_kb=$(grep MemTotal /proc/meminfo | awk '{print $2}')      # Taking System RAM which will be in Kilobytes
+    local total_gb=$(( total_kb / 1024 / 1024 ))                          # Divide given amount by 1024 two times to turn it into Gigabytes
+    local max_ram=$(( total_gb - 1 ))                                     # Reserve 1GB for OS
+    local rec_gb=1
+
+		if [ "$max_ram" -le 4 ]; then             # For 4GB or less.
+			rec_gb=$(( max_ram - 1 ))
+		elif [ "$max_ram" -le 8 ]; then           # For 8GB or less.
+				rec_gb=$(( max_ram - 2 ))
+		elif [ "$max_ram" -le 16 ]; then          # For 16GB or less.
+				rec_gb=$(( max_ram - 4 ))
+		else
+			rec_gb=$(( max_ram * 75 / 100 ))      # For 16GB or more.
+		fi
+			[ "$rec_gb" -lt 1 ] && rec_gb=1      # For Less than 1GB of Usable RAM
+
+    while true; do 		 # 1st Loop : Recommended RAM
+        clear
+        printf "\n\n\n"
+        text "ams 1.0"
+        text "───────────────────────────────────────────────────────"
+        text "${Red}▗▄▄▖  ▗▄▖ ▗▖  ▗▖"
+        text "▐▌ ▐▌▐▌ ▐▌▐▛▚▞▜▌"
+        text "▐▛▀▚▖▐▛▀▜▌▐▌  ▐▌"
+        text "▐▌ ▐▌▐▌ ▐▌▐▌  ▐▌${NC}"
+        printf "\n"
+        text "────────────────────── [ Info ] ───────────────────────"
+        printf "\n"
+        text "Enter the ${BGreen}RAM amount${NC} given to ${BYellow}your${NC} Server"
+        text "You may ${Blue}use the given data to decide ${Green}better${NC}"
+        text "If you ${BYellow}typed nothing${NC}, it will ${BRed}default${NC} to ${BGreen}Recommended${NC}"
+        printf "\n"
+        text "─────────────────────── [ RAM ] ───────────────────────"
+        printf "\n"
+        text "${BBlue}Total${NC} System RAM : ${total_gb}GB"
+        text "${BYellow}Max${NC} Usage RAM    : ${max_ram}GB "
+        text "${BGreen}Recommended${NC} RAM  : ${rec_gb}GB  "
+        printf "\n"
+        text "─── [ Decide Here ] ───────────────────────────────────"
+        printf "\n"
+
+        if [ -n "$error_msg" ]; then
+            text "${BRed}[ERROR] $error_msg${NC}"
         else
-            echo -e "[${BRed}ERROR${NC}] Failed to install Java packages." >&2
-            exit 1
+            printf "\n"
         fi
-		sleep 1
+        printf "\n"
 
-	fi
-}
+        printf "%26s" "" && read -p "Recommended RAM? [y/n] : " pickram
+		printf "\n\n"
 
-download_mcserver() {
+        [ -z "$pickram" ] && pickram="y"
 
-	local JAR_URL="https://piston-data.mojang.com/v1/objects/49c8195703ad0ba4f0a4efbccfd85a4a8ca57431/server.jar"
-	local JAR_PATH="$TARGET_DIR/server.jar"
+        if [[ "$pickram" =~ ^[Yy] ]]; then
+            final_ram=$rec_gb
+            break
 
-	if [ "$silent" = true ]; then
+        elif [[ "$pickram" =~ ^[Nn] ]]; then
 
-		echo -e "[${BYellow}SILENT${NC}] ${Yellow}Downloading${NC} server.jar"
-		curl -fsSl -o "$JAR_PATH" "$JAR_URL" || { echo "[${BRed}ERROR${NC}] Download failed"; exit 1; }
-		echo -e "[${BYellow}SILENT${NC}] server.jar ${Green}Downloaded${NC}"
+            error_msg=""  # Resetting it will prevent the older Error Message to show up again
 
-	else
+            while true; do		# 2nd Loop : Custom RAM
+                clear
+                printf "\n\n\n"
+                text "ams 1.0"
+                text "───────────────────────────────────────────────────────"
+                text "▗▄▄▖  ▗▄▖ ▗▖  ▗▖"
+                text "▐▌ ▐▌▐▌ ▐▌▐▛▚▞▜▌"
+                text "▐▛▀▚▖▐▛▀▜▌▐▌  ▐▌"
+                text "▐▌ ▐▌▐▌ ▐▌▐▌  ▐▌"
+                printf "\n"
+                text "────────────────────── [ Info ] ───────────────────────"
+                printf "\n"
+				text "Enter the ${BGreen}RAM amount${NC} given to ${BYellow}your${NC} Server"
+				text "You may ${Blue}use the given data to decide ${Green}better${NC}"
+				text "If you ${BYellow}typed nothing${NC}, it will ${BRed}default${NC} to ${BGreen}Recommended${NC}"
+                printf "\n"
+                text "─────────────────────── [ RAM ] ───────────────────────"
+                printf "\n"
+				text "${BBlue}Total${NC} System RAM : ${total_gb}GB"
+				text "${BYellow}Max${NC} Usage RAM    : ${max_ram}GB "
+				text "${BGreen}Recommended${NC} RAM  : ${rec_gb}GB  "
+                printf "\n"
+                text "─── [ Decide Here ] ───────────────────────────────────"
+                printf "\n"
 
-		clear
-		printf "\n"
-		echo -- Download --
-		echo -e "${BGreen}Downloading MC 26.1.1 Server.jar${NC}"
-		echo --------------
-		printf "\n"
-		sleep 2
-		# Given link is the direct link to download the .jar file
-		if curl -fL --progress-bar -o "$JAR_PATH" "$JAR_URL"; then
-            echo -e "[${BBlue}AMS${NC}] Download ${Green}Complete${NC}: $JAR_PATH"
-            sleep 2
+                if [ -n "$error_msg" ]; then
+                    text "${BRed}[ERROR] $error_msg${NC}"
+                else
+                    printf "\n"
+                fi
+                printf "\n"
+
+                printf "%26s" "" && read -p "Enter custom RAM in GB: " user_ram
+
+                if ! [[ "$user_ram" =~ ^[0-9]+$ ]]; then
+                    error_msg="Please enter a whole number."
+                    continue
+                elif [ "$user_ram" -gt "$max_ram" ]; then
+                    error_msg="Exceeded limits. Max allowed is ${max_ram}GB."
+                    continue
+                elif [ "$user_ram" -lt 1 ]; then
+                    error_msg="Minimum allocation is 1GB."
+                    continue
+                else
+                    final_ram=$user_ram
+                    break 2
+                fi
+            done
         else
-            echo -e "[${BRed}ERROR${NC}] Failed to download server.jar. Check your internet." >&2
-            exit 1
+            error_msg="Invalid option. Please type y or n."
+            continue
         fi
-		sleep 2
-
-	fi
-
-	if [ ! -s "$JAR_PATH" ]; then
-        echo -e "[${BRed}ERROR${NC}] Downloaded file is empty or missing!" >&2
-        exit 1
-    fi
-
-}
-
-mcserver() {
-
-	local EULA="eula.txt"
-    local PROP_FILE="server.properties"
-
-	if [ "$silent" = true ]; then
-
-		echo -e "[${BYellow}SILENT${NC}] ${Yellow}Setting up${NC} MC Server"
-		java -Xmx1024M -Xms1024M -jar server.jar > /dev/null 2>&1
-
-		if [ ! -f "$EULA" ]; then
-            echo -e "[${BRed}ERROR${NC}] eula.txt was not generated!" >&2
-            exit 1
-        fi
-
-		sed -i 's/eula=false/eula=true/' "$EULA"
-		sed -i 's/motd=.*/motd=Made By ams.sh/' "$PROP_FILE" 2>/dev/null
-		echo -e "[${BYellow}SILENT${NC}] EULA ${Green}Accepted${NC} & MOTD ${Green}set${NC}."
-
-
-
-	else
-
-		clear
-		printf "\n"
-		echo -- Server --
-		echo -e "${BGreen}Setting up Server & and its properties...${NC}"
-		echo ------------
-		printf "\n"
-
-		# Changes Below :
-		# eula=true >eula.txt
-		# motd=Made By ams.sh >server.properties
-
-		sleep 2
-		java -Xmx1024M -Xms1024M -jar server.jar
-
-		if [ -f "$EULA_FILE" ]; then
-            echo -e "[${BBlue}AMS${NC}] ${Green}Accepting${NC} EULA and ${Yellow}customizing${NC} properties..."
-            sed -i 's/eula=false/eula=true/' "$EULA"
-
-            if [ -f "$PROP_FILE" ]; then
-                sed -i 's/motd=.*/motd=Made By ams.sh/' "$PROP_FILE"
-            fi
-
-            echo -e "[${BBlue}AMS${NC}] Setup ${Green}Complete${NC}!"
-            sleep 2
-        else
-            echo -e "[${BRed}ERROR${NC}] Server failed to generate $EULA" >&2
-            exit 1
-        fi
-		sleep 2
-
-	fi
+    done
 }
 
 
-ram_allocate() {
+page5_confirm() {
 
-	TOTAL_KB=$(grep MemTotal /proc/meminfo | awk '{print $2}') #Total RAM Kilobytes
-	TOTAL_GB=$(( TOTAL_KB / 1024 / 1024 )) # Convert to GB
-	MAX_RAM=$(( TOTAL_GB - 1 )) # Reserve 1GB for System
+	clear
+	printf "\n\n\n"
+	text "ams 1.0"
+	text "───────────────────────────────────────────────────────"
+	text "${BWhite}▗▄▄▖ ▗▄▄▄▖ ▗▄▖ ▗▄▄▄ ▗▖  ▗▖"
+	text "▐▌ ▐▌▐▌   ▐▌ ▐▌▐▌  █ ▝▚▞▘ "
+	text "▐▛▀▚▖▐▛▀▀▘▐▛▀▜▌▐▌  █  ▐▌  "
+	text "▐▌ ▐▌▐▙▄▄▖▐▌ ▐▌▐▙▄▄▀  ▐▌  ${NC}"
+	printf "\n"
+	text "───────────────────── [ Summary ] ─────────────────────"
+	printf "\n"
+	printf "%30s" "" && echo -e "> ${BYellow}Server Loader${NC}     :  ${loader} "
+	printf "%30s" "" && echo -e "> ${BGreen}Minecraft Version${NC} :  ${mc_version}"
+	printf "%30s" "" && echo -e "> ${BBlue}Package Manager${NC}   :  ${pkgmgr}"
+	printf "%30s" "" && echo -e "> ${BPurple}RAM Allocation${NC}    :  ${final_ram}GB"
+	printf "\n"
+	text "─── [ Decide Here ] ───────────────────────────────────"
+	printf "\n"
+	printf "%26s" "" && read -p "Proceed? [Y/n] : " pickconfirm
 
-	if [ "$MAX_RAM" -le 4 ]; then
-		REC_GB=$(( $MAX_RAM - 1 )) # For 4GB
-	elif [ "$MAX_RAM" -le 8 ]; then
-		REC_GB=$(( $MAX_RAM - 2 )) # For 8GB
-	elif [ "$MAX_RAM" -le 16 ]; then
-		REC_GB=$(( $MAX_RAM - 4 )) # For 16GB
-	else
-		# For high-spec, leave 25% or cap it (MC often hits diminishing returns above 16G)
-		REC_GB=$(( $MAX_RAM * 75 / 100 ))
-	fi
+	[ -z "$pickconfirm" ] && pickconfirm="y"
 
-# Ensure result NOT be 0 or negative
-	if [ "$REC_GB" -lt 1 ]; then REC_GB=1; fi
-
-
-	if [ "$silent" = true ]; then
-
-		echo -e "[${BYellow}SILENT${NC}] Detecting System RAM for ${Yellow}Allocation${NC}"
-		echo -e "[${BBlue}AMS${NC}] RAM Variable ${Green}Updated${NC}"
-
-		if [ "$recommended" = true ]; then
-			echo -e "[${BBlue}AMS${NC}] ${Yellow}Applying${NC} Recommended RAM"
-
-				REC_RAM=$REC_GB
-
-			echo -e "[${BBlue}AMS${NC}] Recommened RAM ${Green}Allocated${NC}"
+		if [[ ! "$pickconfirm" =~ ^[Yy] ]]; then
+			printf "\n"
+			text "───────────────────── [ Terminated ] ──────────────────"
+			printf "\n"
+			text "${Red}Setup Terminated by User${NC}"
+			printf "\n"
+			exit 0
 
 		else
-
-			if [ -z "$RAM_SET" ]; then
-
-				echo -e "[${BYellow}SILENT${NC}] Detecting ${Yellow}System RAM${NC} for ${Green}Allocation${NC}"
-				echo -e "[${BBlue}AMS${NC}] ${Blue}Total${NC} System RAM : ${TOTAL_GB}GB"
-				echo -e "[${BBlue}AMS${NC}] ${Purple}Usable${NC} System RAM : ${MAX_RAM}GB"
-
-				while true; do
-
-					read -p "Enter RAM amount in GB: " USER_RAM
-
-						# 1. Check if it's a number
-						if ! [[ "$USER_RAM" =~ ^[0-9]+$ ]]; then
-							echo -e "[${BRed}ERROR${NC}] Please enter a whole number (e.g., 8)."
-							printf "\n"
-						continue # Restarts the loop
-						fi
-
-						# 2. Check if it exceeds Max RAM
-						if [ "$USER_RAM" -gt "$MAX_RAM" ]; then
-							echo -e "[${BRed}ERROR${NC}] Exceeded System RAM. Max allowed is ${MAX_RAM}GB."
-							printf "\n"
-						continue # Restarts the loop
-						fi
-
-						# 3. If it passes both, set and break
-						RAM_SET=$USER_RAM
-						echo -e "[${BBlue}AMS${NC}] RAM set to ${RAM_SET}GB."
-						break # This exits the WHILE loop so the script can continue
-				done
-
-			fi
+			printf "\n"
+			text "───────────────────── [ Sudo Access ] ──────────────────"                       # Sudo will usually last for 15mins, this script will finish in 3mins, so don't worry.
+			printf "\n"
+			text "${Yellow}Installing system dependencies requies root.${NC}"
+			printf "\n"
+			printf "%26s" "" && sudo -v || { echo -e "${BRed}[ERROR]${NC} Authentication failed. Exiting."; exit 1; }  # If sudo fails, it will ask again, or will exit entirely.
+			printf "\n"
+			text "Thanks for Using!"
 		fi
 
-	else
-
-		clear
-		printf "\n"
-		echo -- Allocation --
-		echo -e "${BGreen}Detecting System RAM${NC}"
-		echo --------------
-		printf "\n"
-		sleep 2
-		echo -- RAM --
-		echo "Total System RAM : $TOTAL_GB"
-		echo "Usable Amount : $MAX_RAM"
-		echo ----------
-		sleep 2
-
-
-			if [ "$recommended" = true ]; then
-
-				echo "-- -r Option --"
-				echo -e "${BGreen}Automatically Choosing Recommened RAM${NC}"
-				echo -----------------
-				printf "\n"
-				sleep 1
-				echo -- RAM --
-				echo "Amount Chosen : $REC_GB"
-				echo ---------
-				sleep 2
-				REC_RAM=$REC_GB
-
-			else
-
-				echo -- Choosing --
-				echo -e "${BGreen}Choose whether to use Recommened or User-chosen${NC}"
-				echo --------------
-				printf "\n"
-				sleep 2
-				while true; do
-
-					clear
-					echo --------------
-					echo "Recommended RAM : $REC_GB"
-					echo "Maximum Usable RAM : $MAX_RAM"
-					echo ---------------
-					printf "\n"
-					sleep 1
-					read -p "Recommended (y) or User-Chosen (n) [y/n] : " PICKRAM
-
-					case "$PICKRAM" in
-
-						[Yy]*)
-								clear
-								printf "\n"
-								echo -e "[${BBlue}AMS${NC}] Proceeding with ${Greemn}recommended${NC} settings..."
-								sleep 2
-								REC_RAM=$REC_GB
-								sleep 2
-								break
-								;;
-
-						[Nn]*)
-								clear
-								printf "\n"
-								echo -e "[${BBlue}AMS${NC}] ${Yellow}Manual${NC} selection triggered."
-								sleep 2
-
-								while true; do
-										read -p "Enter RAM amount in GB: " USER_RAM
-
-										if ! [[ "$USER_RAM" =~ ^[0-9]+$ ]]; then
-											echo -e "[${BRed}ERROR${NC}] Please enter a valid number."
-										elif [ "$USER_RAM" -gt "$MAX_RAM" ]; then
-											echo -e "[${BRed}ERROR${NC}] Exceeded System RAM. Max is ${MAX_RAM}GB."
-										else
-											RAM_SET=$USER_RAM
-											break 2 # "2" = Exits BOTH the inner while and the outer while loop
-										fi
-								done
-								;;
-
-							*)
-								clear
-								echo -e "[${BRed}ERROR${NC}] '$PICKRAM'. Please enter 'y' for yes or 'n' for no."
-								echo ""
-								sleep 1
-								;;
-					esac
-				done
-			fi
-	fi
 }
 
 
-startsh() {
+# ──────── [ Engines ] ────────────
+# Manifest/API -> Specifc Download Link via Jq -> cURL
 
-	local SCRIPT_FILE="$TARGET_DIR/start.sh"
-	local FINAL_RAM
+vanilla() {
 
-	if [ "$recommended" = true ]; then
-		FINAL_RAM="$REC_RAM"
-	else
-		FINAL_RAM="$RAM_SET"
+	local manifest_url="https://launchermeta.mojang.com/mc/game/version_manifest_v2.json"                                   # Updating the massive json file provided by Mojang
+	local package_url=$(curl -s "$manifest_url" | jq -r --arg VER "$mc_version" '.versions[] | select(.id==$VER) | .url')   # Linking to given version
+
+	if [ -z "$package_url" ]; then
+
+		echo "${BRed}[ERROR]${NC} Minecraft version '${mc_version}' doesn't exist."
+		exit 1
+
 	fi
 
-	if [ -z "$FINAL_RAM" ]; then
-        echo -e "[${BRed}ERROR${NC}] RAM value is missing. Cannot create start.sh" >&2
-        exit 1
-    fi
+	local download_url=$(curl -s "$package_url" | jq -r '.downloads.server.url')               # Get the JAR file download link through "downloads > server > url"
+	curl -s -L -o server.jar "$download_url"
 
 
-	cat <<EOF > "$SCRIPT_FILE"
+}
+
+
+fabric() {
+
+	local latest_loader=$(curl -s "https://meta.fabricmc.net/v2/versions/loader" | jq -r '.[0].version')             # Taking the Latest Loader Available    -> .[0] = Latest Version
+	local latest_installer=$(curl -s "https://meta.fabricmc.net/v2/versions/installer" | jq -r '.[0].version')       # Taking the Latest Installer Available -> .[0] = Latest Version
+
+	local download_url="https://meta.fabricmc.net/v2/versions/loader/${mc_version}/${latest_loader}/${latest_installer}/server/jar"  # Link to that specifc file with said data
+
+	curl -s -L -o server.jar "$download_url"
+
+
+}
+
+
+paper() {
+
+	local user_agent="AbsoluteMinecraftStrap/1.0.0 (contact@ams.sh)"                                # Anonymous user can't access PaperMC's API, hence an User Identity
+	local api_endpoint="https://fill.papermc.io/v3/projects/paper/versions/${mc_version}/builds"    # The PaperMC's API Endpoint that the script needs to access
+
+	local response=$(curl -s -H "User-Agent: $user_agent" "$api_endpoint")
+
+	if echo "$response" | jq -e '.ok == false' > /dev/null 2>&1 || [ -z "$response" ] || [ "$response" = "null" ]; then # Checking if the API is still supported
+
+		echo -e "${BRed}[ERROR]${NC} Minecraft version '${mc_version}' has no supported stable assets on PaperMC."
+		exit 1
+
+	fi
+
+	local download_url=$(echo "$response" | jq -r 'map(select(.channel == "STABLE")) | .[0].downloads."server:default".url') # Response gathers all the information, jq takes whats needed
+
+	if [ "$download_url" = "null" ] || [ -z "$download_url" ]; then # If no stable build is found, the script will exit.
+
+			echo -e "${BRed}[ERROR]${NC} No production-ready STABLE build found for Paper version ${mc_version}."
+			exit 1
+
+	fi
+
+	curl -s -L -H "User-Agent: $user_agent" -o server.jar "$download_url"   # Accessing the API using our User Identity to download the JAR safely
+
+
+}
+
+
+# ──────── [ Process ] ────────────
+# Main Glue of the Code
+
+process() {
+
+	clear
+	printf "\n"
+	echo -e "[${Green}+${NC}] Syncing tools and dependencies via $pkgmgr..."           # Updates & Installs java + jq from given package manager
+		if [ "$pkgmgr" = "apt" ]; then
+			sudo apt-get update -y > /dev/null 2>&1
+			sudo apt-get install default-jdk jq -y > /dev/null 2>&1       # Ubuntu/Debian
+		elif [ "$pkgmgr" = "pacman" ]; then
+			sudo pacman -Syu jdk-openjdk jq --noconfirm > /dev/null 2>&1  # Arch Native
+		elif [ "$pkgmgr" = "dnf" ]; then
+			sudo dnf install java-latest-openjdk jq -y > /dev/null 2>&1   # Fedora
+		elif [ "$pkgmgr" = "yay" ]; then
+			yay -Syu jdk-openjdk jq --noconfirm > /dev/null 2>&1          # Arch AUR
+		fi
+
+	sleep 3
+
+	echo -e "[${Green}+${NC}] Setting up Server's Directory at $HOME..."              # Creates in the common directory, the /home directory
+	mkdir -p "$server"
+	cd "$server" || exit   # If folder wasn't made, the script will exit.
+
+	sleep 3
+
+	echo -e "[${Green}+${NC}] Powering up the Engine for : $loader"                   # Installing the JAR file from given loader & their given APIs/Engines
+	case $loader in
+		"paper")   paper ;;
+		"vanilla") vanilla ;;
+		"fabric")  fabric ;;
+	esac
+
+	sleep 3
+
+	echo -e "[${Green}+${NC}] Generating run.sh Script..."                            # Pre-configuration of the Server's Working + RAM Allocation + 1-click Access
+	echo "eula=true" > eula.txt
+
+	cat << EOF > run.sh
 #!/bin/bash
-# Generated by AMS.sh
-RAM=${FINAL_RAM}
-java -Xmx\${RAM}G -Xms\${RAM}G -jar "$TARGET_DIR/server.jar"
+# ──────────── [ ams ] ────────────
+java -Xmx${final_ram}G -Xms${final_ram}G -jar server.jar
 EOF
 
-	chmod +x "$SCRIPT_FILE" || { echo -e "[${BRed}ERROR${NC}] Failed to make start.sh executable"; exit 1; }
+	sleep 3
 
+	echo -e "[${Green}+${NC}] Making run.sh executable..."
+	chmod +x run.sh        # Allows the file to be ran instantly, without needing the terminal
 
-	if [ "$silent" = true ]; then
-        echo -e "[${BYellow}SILENT${NC}] start.sh created with ${Green}${FINAL_RAM}GB RAM${NC}"
-    else
-        clear
-        echo "-- Start.sh ----"
-        echo -e "${BGreen}Creating Launcher${NC}"
-        echo "----------------"
-        sleep 1
-        echo "Settings: ${FINAL_RAM}GB RAM"
-        echo "Path: $SCRIPT_FILE"
-        echo "----------------"
-        echo -e "[${BBlue}AMS${NC}] start.sh is ready!"
-        sleep 2
-    fi
-
+	echo -e "[${Green}+${NC}] Process Done!"
+	sleep 2
 
 }
 
+# ──────────── [ End ] ────────────
 
-finish() {
+end() {
 
-	if [ "$silent" = true ]; then
+	clear
+	printf "\n\n\n"
+	text "Absolute Minecraft Strap 1.0"
+	text "───────────────────────────────────────────────────────"
+	text "${BWhite} ▗▄▖ ▗▖  ▗▖ ▗▄▄▖"
+	text "▐▌ ▐▌▐▛▚▞▜▌▐▌   "
+	text "▐▛▀▜▌▐▌  ▐▌ ▝▀▚▖"
+	text "▐▌ ▐▌▐▌  ▐▌▗▄▄▞▘${NC}"
+	printf "\n"
+	text "────────────────────── [ Done ] ───────────────────────"
+	printf "\n"
+	text "Your Minecraft Server is ${Green}completely ready!${NC}"
+	text "Located at : ${Purple}${server}${NC}"
+	printf "\n"
+	text "───────────────────── [ Start ] ───────────────────────"
+	printf "\n"
+	printf "%30s" "" && echo -e ">  ${BYellow}cd $server${NC}"
+	printf "%30s" "" && echo -e ">  ${BYellow}./run.sh${NC}"
+	printf "\n"
+	text "──────────────────── [ Please ] ───────────────────────"
+	printf "\n"
+	text "${Yellow}Star this script${NC} in GitHub if you find this cool!"
+	text "Check out ${BWhite}@Glazzite${NC} on ${Green}GitHub/YT/X${NC}"
+	text "${Blue}Thanks for Using this script! Enjoy! <3${NC}"
+	printf "\n"
+	text "─── [ Finish Here ] ───────────────────────────────────"
+	printf "\n"
+	printf "%26s" "" && read -p "Press Enter to finish... "
+	printf "\n\n"
+	exit 0
 
-		echo -e "[${BYellow}SILENT${NC}] Your MC Server is located in ${BBlue}${TARGET_DIR}${NC}"
-		echo -e "[${BYellow}SILENT${NC}] To Start, run start.sh in ${BBlue}${TARGET_DIR}/start.sh${NC}"
-		echo -e "[${BYellow}SILENT${NC}] More Settings in ${BBlue}server.properties${NC}"
-
-	else
-
-		clear
-		printf "\n"
-		echo -- Script Done --
-		echo -e "Your Minecraft Server is ${Green}Ready${NC}!"
-		echo -e "Your Minecraft Server is located in ${BBlue}${TARGET_DIR}${NC}"
-		echo ------------------
-		echo
-		read -p "Press any key to continue..."
-		echo
-		echo -- Start Server --
-		echo -e "To ${Yellow}start your server${NC}, please execute the start.sh file found in : "
-		echo -e "$TARGET_DIR"/start.sh
-		echo -- More --
-		echo -e "More Settings related to the server in ${Blue}server.properties${NC}"
-		echo ------------------
-		printf "\n"
-		read -p "Press any key to finish..."
-		printf "\n"
-
-	fi
 }
 
-stop() {
+# ──────────────── [ Script ] ────────────────────────────
 
-	if [ "$silent" = true ]; then
-
-		echo -e "[${BYellow}SILENT${NC}] Thank you."
-		exit 0
-
-	else
-
-		clear
-		echo -e "[${BBlue}AMS${NC}] adioso~"
-		exit 0
-
-	fi
-}
-
-
-
-
-# -- Start --
-
-banner
 intro
-script_dir
-install_java
-download_mcserver
-mcserver
-ram_allocate
-startsh
-finish
-stop
+page1_loader
+page2_version
+page3_pkg
+page4_ram
+page5_confirm
+process
+end
 
-# -- End --
+# ─────────────── [ Thanks ] ────────────────────────────
+# Check out @Glazzite for More.
+# Star this Repo if you liked it.
+# And Thanks for Using! <3
+# ───────────────────────────────────────────────────────
+
+
