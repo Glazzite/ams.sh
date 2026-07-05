@@ -1,0 +1,85 @@
+
+Changelog of ams.sh
+
+    v0.1 [April 4 2026]
+
+        v0.1 has been released.
+        Basic Bash Script
+
+    v0.2 [April 4 2026]
+    Functions
+
+        Added function support for important segments
+        Removed # -- XYZ -- comments
+
+    v0.3 [April 5 2026]
+    Flags/Options
+
+        Added Flag/Option Support
+        Flags : -h -r -u -s -v
+        Cleaned up Output Echo
+        Removed a few comments
+
+    v0.4 [April 19 2026]
+    Ram Allocation + start.sh
+
+        Added Ram Allocation Logic
+        Both Recommended & User-Choice
+        Full Support with -sr options
+        Loops & Cases was used
+        Added of Creation of start.sh
+        Full Script is Usable Again
+
+    v0.5 [April 20 2026]
+    Error Handling
+
+        Added Error Handling for All Functions
+        start() : 70+ Lines -> <30 Lines
+        Fixed Typos
+
+    v0.6 [May 5 2026]
+    Decor
+
+        Added Color Variables for UI
+        Added Changelog Option [ -c ]
+        Added License Option [ -l ]
+        Cleaned Up Code
+
+    v1.0 [July 5 2026]
+    Release
+
+        ams.sh was renamed to 'Absolute Minecraft Strap'.
+        ams.sh was moved to 'Release' status.
+        Complete Redo from scratch
+
+        ──────────── [ UI ] ─────────────
+        Massive UI Overhaul.
+        Centered UI Elements via 'text()' function.
+        Replaced '----' to '───'.
+        Added Interactive Pages for user inputs beforehand.
+        Comments were added.
+        Proper divisions of code was implemented.
+
+        ───── [ Extended Support ] ──────
+        Engines/API Accessed JAR Downloading were added.
+        Vanilla / Fabric / Paper support was introduced.
+        Multi-MC Version support was introduced.
+        apt / dnf / pacman / yay support was introduced.
+
+        ───────── [ Bug Fixes ] ──────────
+        Superuser bug was fixed using 'sudo -v'.
+        It is not required to use sudo with ams.sh anymore.
+
+        ─────────── [ Misc. ] ─────────────
+        Environment parameters for creating a directory was removed.
+        RAM Allocation logic was simplified.
+        run.sh was simplified.
+        Pre-defined Variables was introduced.
+        ASCII art was changed to 'Diamfont'.
+        New PKGs to Install : java, jq
+        Starting comment was reduced.
+        Background Color Variables was removed.
+        Silent & Recommended Flags were removed.
+        Spacing was made in Flags.
+        Changelog order was reversed.
+        Small licensing change to accompany the new name.
