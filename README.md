@@ -1,8 +1,8 @@
 <h1 align="center">
 
-**Automated Minecraft Server**
+**Absolute Minecraft Strap**
 
-<img src="images/ams.png" alt="Automated Minecraft Server" width="600">
+<img src="images/banner.png">
 
 </h1>
 
@@ -18,123 +18,104 @@
 
 <div align="center">
 
-ams.sh is a lightweight, deployment, bootstrap script designed to spin up a production-ready, Java Minecraft server in under 5 minutes. By condensing environment configuration, dependency management, and EULA automation into a single execution, it eliminates the friction of manual setup, delivering a clean, unbloated instance every time. 
+ams.sh is a _lightweight_, deployment, **bootstrap script** designed to **spin up a production-ready, Java Minecraft server** in under **5 minutes**. By condensing _environment configuration_, _dependency management_, and _EULA automation_ into a **single execution**, it **eliminates the friction** of manual setup, delivering a **clean, unbloated instance every time**. 
 
 </div>
 
 
 # 📘 Installation
 
-There are 3 methods to download the script, all needing a bash commandline/terminal.
+There are **3 methods** to install the script, all needing a **bash commandline/terminal**.
 
 ### 1. cURL (simplest)
 ```
-curl -sSL https://github.com/Glazzite/ams.sh/releases/download/v0.6/ams-v0.6.sh | bash
+curl -sSL https://github.com/Glazzite/ams.sh/releases/download/v1.0/ams-v1.0.sh | bash
 ```
 
 ### 2. Releases
 Latest versions of the script will be downloadable in the Release tab of this repo. Once downloaded,
 ```
 cd /{saved-directory}/
-chmod -x ams.sh
-sudo ams.sh
+chmod +x ams.sh
+./ams.sh
 ``` 
 
 ### 3. Repo Cloning
 ``` 
 git clone https://github.com/Glazzite/ams.sh
 cd ams.sh
-chmod -x ams.sh
-sudo ams.sh
+chmod +x ams.sh
+./ams.sh
 ```
 
-And the script will guide you and do its thing automatically.
+# 👀 Preview
+
+<img src="images/ams-ui.png">
+
 
 # 📕 Information
 
-### ❓ How?
-In its core lines, its just,
-- Installing Java
-- Downloading Server.jar from MC
-- Make a Working Directory
-- Start Server
-- Edit Eula.txt
-
-With extra decorations and supportive commands, and thats the scirpt. 
-
 > [!NOTE]
-> This script is fully online-based, so make sure to stay connected to the internet before use. 😊
+> This script is has **online-based functions**, so make sure to **stay connected to the internet** before use. 😊
 
 ### ❓ Why?
-To use a repurposable script ->
+To use a **repurposable script** ->
 - To automate any MC server setup
 - For people who often makes new serers
 - For beginners who don't know how to make one
 
-> [!CAUTION]
-> This script was made as a learning experience for me, the creator.
-
 ### 💻 Operating System
-This script is made for Linux (GNU/Linux), specifcally,
+This script is **made for Linux (GNU/Linux)**, specifcally,
 - [x] Ubuntu/Debain (apt)
-- [ ] Arch Linux (pacman/yay)
+- [x] Fedora (dnf)
+- [x] Arch Linux (pacman/yay)
 
 As this scirpt installs packages via the native package manager of said distros.
 
+> [!NOTE]
+> Packages installed are Java Runtine & Jq.
+
 ### ⛏ Minecraft Version
-Currently supported MC versions are
-- [x] 26.1.1
+**All server supported MC versions** are can be made using this script.
+With support to loaders. Currently :
+- [x] Vanilla
+- [x] Fabric
+- [x] PaperMC
 
-> [!IMPORTANT]
-> More MC versions will be supported soon.
+# 🧪 Features List
 
-# 🧪 To-Do List
-
-Start
-- [x] Make Basic Script - v0.1
-
-Basics (v0.x)
-- [x] Functions - v0.2
-- [x] Flags/Options - v0.3
-- [x] start.sh / Auto-Generated Script with Recommended/User-Choiced Flags - v0.4
-- [x] Ram Allocation Added - v0.4
-- [x] Error-Handling / Cleanup of Script - v0.5
-- [x] Cleaner Decoratives v0.6
-- [ ] Package Manager Detector v0.7
-
-Minecraft Related
-- [ ] Forge/Fabirc/Paper Setup
-- [x] Automated Optimizations
-> as in java memory flags
-
-QoL Features
-- [ ] User-Friendly Guided Install
-- [ ] Multi-MC Version Capability
+- [x] User-Friendly Guided Install
+- [x] Multi-MC Version Capability
+- [x] Vanilla / Fabric / Paper Loader Support
+- [x] Automated Optimizations + Easy 1-click Server Start (run.sh)
+- [x] apt / dnf / pacman / yay Package Manager Support
+- [x] API/Manifest Accessed Algorithm (meaning, this script will support all future MC versions!)
 
 OS Capability
-- [ ] Arch Linux
-- [ ] SteamOS
-- [ ] Linux Distros
+- [x] Arch Linux
+- [x] Linux Distros
+- [ ] SteamOS [NEED TESTERS!!]
 
 > [!IMPORTANT]
 > The script will be 100% Bash/Shell written and will not use any external languages.
 
 # 🔔 Credits
-Code written by Glazzite.
-License under GNU 3.0 General Public License.
-
-> [!IMPORTANT]
-> A bit of AI was used, I say in bit, I mean 10-15% of Logic.
+- **Code written by Glazzite**.
+- **Licensed** under **GNU 3.0 General Public License**.
 
 # 🍵 Buy me some tea?
 Donating isn't necessary, just a reminder.
 
-> i hate caffeine crash.
 
-# 🙏 Thank you!
-Have fun with the script!
+<h2 align="center">
+🙏 Thank you!
+  
+Have fun with the script! 🤍
+</h2>
 
-"Shattering Limits." - Glazzite
+<h4 align="center">
+"Shattering Limits."
+</h4>
 
 
 
