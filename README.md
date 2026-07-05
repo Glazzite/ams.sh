@@ -10,7 +10,7 @@
 
 *"The fastest way to bootstrap a Minecraft server on Linux."*
 
-![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/glazzite/ams.sh/total?style=for-the-badge&color=lightblue)
+![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/glazzite/ams.sh/total?style=for-the-badge&color=white)
 ![GitHub Repo stars](https://img.shields.io/github/stars/glazzite/ams.sh?style=for-the-badge&color=gold)
 ![GitHub Tag](https://img.shields.io/github/v/tag/glazzite/ams.sh?include_prereleases&sort=semver&style=for-the-badge&label=Version&color=Lightgreen)
 
