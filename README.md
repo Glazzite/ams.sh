@@ -105,6 +105,7 @@ OS Capability
 
 # 🍵 Buy me some tea?
 Donating isn't necessary, just a reminder.
+> nah nvm, don't send me money, im too broke for that T-T
 
 
 <h2 align="center">
